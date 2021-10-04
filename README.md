@@ -6,7 +6,7 @@ In addition, this project is establised to fullfil the requirement for "Project"
 * Ha Xuan Huy
 * Pham Minh Huy
 * Vo Thanh Minh Khoi
-* Huynh Nhu Nhat
+* Huynh Nhat Anh
 
 ## :fire: Getting started with the project
 Before getting started with the project, please carefully check out the following folder for your purpose\
