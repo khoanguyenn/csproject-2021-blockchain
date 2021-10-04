@@ -37,3 +37,8 @@
 rm -r ../asset-transfer-ledger-queries/application-javascript/wallet
 ```
 
+- To open the couchDB webpage 
+  - link: http://localhost:5984/_utils
+  - login
+    - username = admin 
+    - password = adminpw
