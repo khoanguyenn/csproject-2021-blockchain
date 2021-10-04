@@ -12,7 +12,7 @@ In addition, this project is establised to fullfil the requirement for "Project"
 Before getting started with the project, please carefully check out the following folder for your purpose\
 * ```server``` - an ExpressJS backend-server, serve CRUD API endpoint for vaccines, template engine for web user-interface\
 * ```blockchain``` - blockchain core including the network and its components setup\
-* ```docs``` - documentation folder, consists of guide, backlog, meeting note, presentation,...\
+* ```docs``` - documentation folder, consists of guide, backlog, meeting note, presentation,...
 
 ## :dizzy: Current state
 - [x] Basic folder structure
