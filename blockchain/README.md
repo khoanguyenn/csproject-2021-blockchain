@@ -24,7 +24,7 @@
 - To update the current chain code 
 
 ```shell
-./network.sh deployCC -ccn ledger -ccp ../asset-transfer-ledger-queries/chaincode-org1 -ccl javascript -ccs 2 -ccv 2.0
+./network.sh deployCC -ccn ledger -ccp ../asset-transfer-ledger-queries/chaincode-javascript -ccl javascript -ccs 2 -ccv 2.0
 ```
 
 - note:
