@@ -4,7 +4,8 @@
   "description": "Back-end server for blockchain implementation",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./src/index.js"
   },
   "keywords": [
     "blockchain",
@@ -12,5 +13,8 @@
     "vaccine"
   ],
   "author": "Khoa Nguyen",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
