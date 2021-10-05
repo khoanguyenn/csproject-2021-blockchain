@@ -20,3 +20,34 @@ Before getting started with the project, please carefully check out the followin
 - [ ] CouchDB database schema
 - [ ] System workflow
 
+## ⛓️ Chaincode function
+
+Development functions
+* ```InitVacccines```, create a set of default vaccines
+
+Wholesale functions
+* ```CreateVaccine(ctx, name, vaccineID)``` - create a new vaccine with name and ID
+* ```DispatchVaccine(ctx, vaccineID, newOwner)``` - transfers vaccine from vaccine manufacturer to distributor
+* ```GetDispatchLogs(ctx)``` - get all of transfered vaccine information 
+
+Distributor functions
+* ```GetVaccine(ctx, vaccineID)``` - get a vaccine with given ID
+* ```VaccinateCitizen(ctx, vaccineID, userID)``` - vaccinate the given citizen's ID, same as giving a userID a vaccine
+* ```GetDeliveryLogs(ctx)``` - return all retrive vaccine information from wholesaler
+* ```CheckVaccinateState(ctx, userID)``` - return vaccine state of a specific user
+
+Ultility functions
+* ```VaccineExists(ctx, id)``` - returns true when vaccine with given ID exists in worldstate
+* ```GetAllVaccinesOf(ctx, owner)``` - get all vacine information of a specific owner
+* ```GetAllVaccines(ctx)``` - return all of the available vaccine in worldstate
+
+## 📖 Database schema
+* ```vaccineID``` - a unique ID of the vaccine
+* ```vaccineName``` - vaccine's name
+* ```vaccineManufacturer``` - vaccine's manufacturer
+* ```owner``` - owner of the vaccine, could either manufacturer, distributor or citizens
+
+## 📖 API endpoints
+
+* ```/register```
+* ```/login```
