@@ -2,6 +2,13 @@
 
 # set up network and deploy smart contracts into channel 
 
+- Make sure you have up-to-date version of docker images and fabric binaries -
+- note: try to run the command line in another folder different from the current project folder 
+
+```shell
+curl -sSL https://bit.ly/2ysbOFE | bash -s
+```
+
 - Before executing all the codes below, make sure that you are currently in the folder test-network
 
 - Initialize network with the configuration of couchDB and CA (certificate authorities)
