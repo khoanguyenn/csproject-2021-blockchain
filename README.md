@@ -46,6 +46,7 @@ Ultility functions
 * ```vaccineName``` - vaccine's name
 * ```vaccineManufacturer``` - vaccine's manufacturer
 * ```owner``` - owner of the vaccine, could either manufacturer, distributor or citizens
+* ```deliverTo``` - current state of the owner ('org1', 'org2', 'user')
 
 ## 📖 API endpoints
 
