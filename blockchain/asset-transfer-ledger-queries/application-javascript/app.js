@@ -137,7 +137,39 @@ async function main() {
 
 			// let result;
 
-			
+			console.log(`add vaccine mordena with id mordena123`) 
+			await contract.submitTransaction('CreateVaccine', 'mordena', 'mordena123')			
+			console.log(`commited mordena into couch DB successfully`)
+
+			console.log('dispatch vaccine astra123 and morderna123') 
+			await contract.submitTransaction('DispatchVaccine', 'astra123', 'tphcm')
+			await contract.submitTransaction('DispatchVaccine', 'mordena123', 'tphcm')
+			console.log('dispatch successfully') 
+
+			console.log('get dispatch logs ')
+			let logs = await contract.evaluateTransaction('GetDispatchLogs') 
+			console.log(`*** LOGS: ${prettyJSONString(logs.toString())}`)
+
+			console.log('Get Vaccine astra123')
+			let vaccine = await contract.evaluateTransaction('GetVaccine', 'astra123')
+			console.log(`*** VACCINE: ${prettyJSONString(vaccine.toString())}`)
+
+			console.log('Vaccinate vaccine id astra123, mordena123 to user thai')
+			await contract.submitTransaction('VaccinateCitizen', 'astra123', 'thai')
+			await contract.submitTransaction('VaccinateCitizen', 'mordena123', 'thai')
+			console.log('vaccinated successfully')
+
+			console.log('Vaccinated logs') 
+			let vaccinatedLogs = await contract.evaluateTransaction('GetDeliveryLogs')
+			console.log(`Vaccinated Logs: ${prettyJSONString(vaccinatedLogs.toString())}`)
+
+			console.log('Get Vaccines Of owner Thai') 
+			let results = await contract.evaluateTransaction('GetAllVaccinesOf', 'thai')
+			console.log(`Results: ${prettyJSONString(results.toString())}`)
+
+			console.log('Get alll vaccine in the datbase') 
+			let vaccines = await contract.evaluateTransaction('GetAllVaccines')
+			console.log(`Vaccines: ${prettyJSONString(vaccines.toString())}`)
 
 			// // Let's try a query operation (function).
 			// // This will be sent to just one peer and the results will be shown.
