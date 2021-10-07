@@ -11,6 +11,8 @@ const adminRoute = require("./routes/admin")
 app.use("/admin", adminRoute);
 const logsRoute = require('./routes/logs')
 app.use("/logs", logsRoute)
+const vaccineRoute = require('./routes/vaccinate')
+app.use("vaccinate/", vaccineRoute)
 
 app.get("/", (req, res) => {
     res.send("Hello world from blockchain network!");

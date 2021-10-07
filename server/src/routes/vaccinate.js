@@ -1,6 +1,6 @@
 const express = require("express")
 const router = express.Router()
-const {createContract, disconnectGateway}=require('../../../blockchain/asset-transfer-ledger-queries/application-javascript/util/web_util')
+const {createContract, disconnetGateway}=require('../../../blockchain/asset-transfer-ledger-queries/application-javascript/util/web_util')
 
 
 // PUT /vaccinate?vaccineID=<vaccineID>&userID=<userID>
@@ -22,7 +22,7 @@ router.put("/", async function (req, res) {
       console.error("error: " + err)
       res.sendStatus(500)
   } finally {
-      disconnectGateway();
+    disconnetGateway();
   }
 })
 
@@ -45,7 +45,7 @@ router.get("/", async function (req, res) {
       console.error("error: " + err)
       res.send(500)
   } finally {
-      disconnectGateway();
+    disconnetGateway();
   }
 })
 
