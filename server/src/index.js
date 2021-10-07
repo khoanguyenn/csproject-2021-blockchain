@@ -9,6 +9,8 @@ app.use(logginMiddleware);
 //Routes apply
 const adminRoute = require("./routes/admin")
 app.use("/admin", adminRoute);
+const logsRoute = require('./routes/logs')
+app.use("/logs", logsRoute)
 
 app.get("/", (req, res) => {
     res.send("Hello world from blockchain network!");

@@ -22,7 +22,6 @@ const userId = 'appUser';
 function prettyJSONString(inputString) {
 	return JSON.stringify(JSON.parse(inputString), null, 2);
 }
-
 // pre-requisites:
 // - fabric-sample two organization test-network setup with two peers, ordering service,
 //   and 2 certificate authorities, with the state database using couchdb

@@ -20,7 +20,7 @@ curl -sSL https://bit.ly/2ysbOFE | bash -s
 - Deploy chaincode into the network 
 
 ```shell
-./network.sh deployCC -ccn ledger -ccp ../asset-transfer-ledger-queries/chaincode-org1 -ccl javascript 
+./network.sh deployCC -ccn ledger -ccp ../asset-transfer-ledger-queries/chaincode-javascript -ccl javascript 
 ```
 
 - note:
