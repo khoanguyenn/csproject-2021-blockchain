@@ -17,7 +17,7 @@ const chaincodeName = 'ledger';
 const mspOrg1 = 'ManufacturerMSP';
 
 const walletPath = path.join(__dirname, 'wallet');
-const userId = 'asc';
+const userId = 'appUser';
 
 function prettyJSONString(inputString) {
 	return JSON.stringify(JSON.parse(inputString), null, 2);

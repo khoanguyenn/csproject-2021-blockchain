@@ -1,9 +1,20 @@
+
 const express = require("express")
 const app = express.Router()
 const {createContract, disconnetGateway}=require('../../../blockchain/asset-transfer-ledger-queries/application-javascript/util/web_util')
 
 function prettyJSONString(inputString) {
 	return JSON.stringify(JSON.parse(inputString), null, 2);
+}
+function makeid(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * 
+ charactersLength));
+   }
+   return result;
 }
 
 /**
@@ -24,17 +35,34 @@ app.get("/distributor", async (req, res) => {
 		  disconnetGateway();
 		}
 	})
+
 /**
  * @author Pham Minh Huy
- * @event POST request with a body {vaccineID : var1, vaccineName: var2}to /vaccine/manufacturer
- * @returns add new vaccineID if possible to the ledger under factory-newlycreated state
+ * @event POST request with a body {vaccineName: var2}to /vaccine/manufacturer
+ * @returns add new vaccine with a randomized ID to the ledger under factory-newlycreated state
  */
 app.post("/manufacturer",async (req,res)=>{
 		try {
 			var packaged_data_field1 = String(req.body.vaccineName)
-			var packaged_data_field2 = String(req.body.vaccineID)
+		
 			const contract = await createContract();
-			results = await contract.submitTransaction('CreateVaccine',packaged_data_field1,packaged_data_field2);
+			let world_state= JSON.parse(await contract.evaluateTransaction('GetAllVaccines'))
+
+			do {
+				var hasMatch =false;
+				var random_ID = makeid(6)
+				for (const item of world_state) {
+					var loc=JSON.stringify(item).indexOf('{"vaccineID":') //naiive method but will do for now 
+					if( loc > -1 ){
+						let vID =JSON.stringify(item).at(loc);
+						if (vID.localeCompare(random_ID)==true){
+							hasMatch = true;break;
+						}
+					}
+				}
+			} while(hasMatch==true)
+	
+			results = await contract.submitTransaction('CreateVaccine',packaged_data_field1,random_ID);
 			res.sendStatus(200);
 		}
 		 catch (err) {

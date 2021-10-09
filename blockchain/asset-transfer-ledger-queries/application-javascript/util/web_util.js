@@ -6,15 +6,17 @@ const { buildCCPOrg1, buildWallet } = require('../../../test-application/javascr
 const walletPath = path.join(__dirname, '../wallet');
 const channelName = 'mychannel';
 const chaincodeName = 'ledger';
-const userId = 'appUser';
 let gateway;
 
 /**
  * @author Ngo Quoc Thai
  * @description create a gateway for user to interact with network through returned object contract
+ * @updated 9 Oct 2021 by Pham Minh Huy, bringing userid to the contract parameter for future updates regarding logins
  * @returns an object that can call chaincode functions
  */
-exports.createContract = async function () {
+
+
+exports.createContract = async function (userId = 'admin') {
     const ccp = buildCCPOrg1();
     const wallet = await buildWallet(Wallets, walletPath);
     gateway = new Gateway();
