@@ -24,10 +24,10 @@ During this second sprint, the following goals must be achieved
 ### Architecture blockchain v2.0
 * Make sure the current network is running
 * Adds 1 more peer to organization ```Manufacturer``` and ```Distributor```.
- * 2 more CouchDB 
-* Adds ```MedicalUnit``` organization with 2 peers to the network.
- * MedicalUnit-CA needs to be added.
- * MedicalUnit's CouchDB
+  * 2 more CouchDB, 1 for ```Manufacturer```, 1 for ```Distributor```
+* Adds ```MedicalUnit``` organization with 1 peer to the network.
+  * 1 more MedicalUnit-CA needs to be added.
+  * 1 more MedicalUnit's CouchDB
 
 ### Web-server interface
 * User interface: 
@@ -61,16 +61,24 @@ During this second sprint, the following goals must be achieved
 
 ### Database schema 
 The vaccine transfer between ```Manufacturer```, ```Distributor```, ```MedicalUnit``` is in a lot. 
-For example, ```lotNo: M345``` from manufacturer ```owner: Moderna``` to distributor ```owner: KMedicine``` and finally to medical unit ```owner: MedicHCMC```.
-Vaccine hit the final destination ```owner: MedicHCMC``` then index each vaccine with unique vaccineID
+For example, ```lotNo: M345``` from manufacturer ```owner: Moderna``` to distributor ```owner: KMedicine``` and finally send to medical unit ```owner: MedicHCMC```.
+Vaccine lot hit the final destination ```owner: MedicHCMC``` then each vaccine being indexed by unique vaccineID
 * From ```Manufacturer```, ```Distributor```, ```MedicalUnit``` 
 
   * ```vaccineLot``` - a unique vaccine lot's number
   * ```vaccineManufacturer``` - vaccine's manufacturer
+  * ```vaccineName``` - vaccine's name, stated by manufacturer
+  * ```vaccineQuantity``` - number of vaccines available in a lot
+  * ```dateOfManufacture``` - vaccine's date of manufacture 
   * ```owner``` - owner of the vaccine, could either manufacturer, distributor, medical unit or citizens
-  * ```deliverTo``` - current state of the owner ('org1', 'org2', 'user')
 
 * From ```MedicalUnit```
-  * ```vaccineID``` - a unique vaccineID
+
+  * ```vaccineId``` - a unique vaccineID
   * ```vaccineManufacturer``` - vaccine's manufacturer
+  * ```vaccineName``` - vaccine's name, stated by manufacturer
+  * ```dateOfManufacture``` - vaccine's date of manufacture 
   * ```owner``` - current owner of the vaccine, could either a medical unit or user's ID
+
+* From ```User````
+* 
