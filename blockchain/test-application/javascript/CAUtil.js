@@ -17,6 +17,7 @@ const adminUserPasswd = 'adminpw';
 exports.buildCAClient = (FabricCAServices, ccp, caHostName) => {
 	// Create a new CA client for interacting with the CA.
 	const caInfo = ccp.certificateAuthorities[caHostName]; //lookup CA details from config
+	console.log(caInfo)
 	const caTLSCACerts = caInfo.tlsCACerts.pem;
 	const caClient = new FabricCAServices(caInfo.url, { trustedRoots: caTLSCACerts, verify: false }, caInfo.caName.toLowerCase());
 

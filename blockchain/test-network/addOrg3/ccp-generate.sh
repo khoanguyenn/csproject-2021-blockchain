@@ -13,7 +13,7 @@ function json_ccp {
         -e "s#\${PEERPEM}#$PP#" \
         -e "s#\${CAPEM}#$CP#" \
         ccp-template.json
-}
+}s
 
 function yaml_ccp {
     local PP=$(one_line_pem $4)
