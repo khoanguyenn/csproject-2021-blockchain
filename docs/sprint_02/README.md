@@ -44,6 +44,8 @@ During this second sprint, the following goals must be achieved
 * MedicalUnit interface:
   * Show a list of available vaccine in the store, vaccine id, type and current owner state
   * List of given vaccine, and vaccine's owners
+ 
+ **Figma:** [Link to UI design](https://www.figma.com/file/PVXHyekYD6Oxn2XmmPJXgU/Blockchain-network)
   
 ### Chaincode update
 * ```VaccineRecord(ctx, lotNo, vaccineID)``` - takes vaccine lot's number and vaccine's ID, returns all vaccines has 
@@ -58,17 +60,17 @@ During this second sprint, the following goals must be achieved
 * 
 
 ### Database schema 
-* From ```Manufacturer``` to ```Distributor```
+The vaccine transfer between ```Manufacturer```, ```Distributor```, ```MedicalUnit``` is in a lot. 
+For example, ```lotNo: M345``` from manufacturer ```owner: Moderna``` to distributor ```owner: KMedicine``` and finally to medical unit ```owner: MedicHCMC```.
+Vaccine hit the final destination ```owner: MedicHCMC``` then index each vaccine with unique vaccineID
+* From ```Manufacturer```, ```Distributor```, ```MedicalUnit``` 
 
   * ```vaccineLot``` - a unique vaccine lot's number
-  * ```vaccineName``` - vaccine's name
   * ```vaccineManufacturer``` - vaccine's manufacturer
-  * ```owner``` - owner of the vaccine, could either manufacturer, distributor or citizens
+  * ```owner``` - owner of the vaccine, could either manufacturer, distributor, medical unit or citizens
   * ```deliverTo``` - current state of the owner ('org1', 'org2', 'user')
-* From ```Distributor``` to ```MedicalUnit```
 
-  * ```vaccineID``` - a unique ID of the vaccine
-  * ```vaccineName``` - vaccine's name
+* From ```MedicalUnit```
+  * ```vaccineID``` - a unique vaccineID
   * ```vaccineManufacturer``` - vaccine's manufacturer
-  * ```owner``` - owner of the vaccine, could either manufacturer, distributor or citizens
-  * ```deliverTo``` - current state of the owner ('org1', 'org2', 'user')
+  * ```owner``` - current owner of the vaccine, could either a medical unit or user's ID
