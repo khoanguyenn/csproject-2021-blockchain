@@ -79,6 +79,3 @@ Vaccine lot hit the final destination ```owner: MedicHCMC``` then each vaccine b
   * ```vaccineName``` - vaccine's name, stated by manufacturer
   * ```dateOfManufacture``` - vaccine's date of manufacture 
   * ```owner``` - current owner of the vaccine, could either a medical unit or user's ID
-
-* From ```User````
-* 
