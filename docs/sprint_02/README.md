@@ -22,9 +22,12 @@ During this second sprint, the following goals must be achieved
 # Tasks details 
 
 ### Architecture blockchain v2.0
-* Make sure the current netowrk is running
+* Make sure the current network is running
 * Adds 1 more peer to organization ```Manufacturer``` and ```Distributor```.
+ * 2 more CouchDB 
 * Adds ```MedicalUnit``` organization with 2 peers to the network.
+ * MedicalUnit-CA needs to be added.
+ * MedicalUnit's CouchDB
 
 ### Web-server interface
 * User interface: 
@@ -50,16 +53,20 @@ During this second sprint, the following goals must be achieved
 * ```/vaccine/user/:userId``` - get vaccine's information of given user's ID
 
 ### User authentication
-
+* User register with citizen's ID and password.
+* Admin check and approve the citizen's information
+* 
 
 ### Database schema 
 * From ```Manufacturer``` to ```Distributor```
+
   * ```vaccineLot``` - a unique vaccine lot's number
   * ```vaccineName``` - vaccine's name
   * ```vaccineManufacturer``` - vaccine's manufacturer
   * ```owner``` - owner of the vaccine, could either manufacturer, distributor or citizens
   * ```deliverTo``` - current state of the owner ('org1', 'org2', 'user')
 * From ```Distributor``` to ```MedicalUnit```
+
   * ```vaccineID``` - a unique ID of the vaccine
   * ```vaccineName``` - vaccine's name
   * ```vaccineManufacturer``` - vaccine's manufacturer
