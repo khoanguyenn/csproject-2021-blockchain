@@ -3,15 +3,15 @@ const router = express.Router()
 const {createContract, disconnetGateway}=require('../../../blockchain/asset-transfer-ledger-queries/application-javascript/util/web_util')
 
 
-// PUT /vaccinate?vaccineID=<vaccineID>&userID=<userID>
+// PUT /vaccinate with body request {"vaccineID":"value","userID":"value"}
 
 /**
  * @author Ha Xuan Huy
  * @returns Updated buffer vaccine object
  */
 router.put("/", async function (req, res) {
-  let key1 = req.query.vaccineID;
-  let key2=req.query.userID;
+  let key1 =req.body["vaccineID"];
+  let key2=req.body["userID"];
   try {
       const contract = await createContract();
 
