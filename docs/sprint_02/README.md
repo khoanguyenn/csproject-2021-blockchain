@@ -2,7 +2,7 @@
 
 This is the tasklist for the second sprint, specify the tasks and the assignee of the task
 
-### Goals
+### 🥇 Goals
 
 During this second sprint, the following goals must be achieved 
 * New version of blockchain architecture v2.0, more peers for manufacturer, distributor.
@@ -21,7 +21,7 @@ During this second sprint, the following goals must be achieved
 
 # Tasks details 
 
-### Architecture blockchain v2.0
+### ✏️ Architecture blockchain v2.0
 * Make sure the current network is running
 * Adds 1 more peer to organization ```Manufacturer``` and ```Distributor```.
   * 2 more CouchDB, 1 for ```Manufacturer```, 1 for ```Distributor```
@@ -29,7 +29,7 @@ During this second sprint, the following goals must be achieved
   * 1 more MedicalUnit-CA needs to be added.
   * 1 more MedicalUnit's CouchDB
 
-### Web-server interface
+### 🚪 Web-server interface
 * User interface: 
   * Login form
   * Register form
@@ -47,19 +47,31 @@ During this second sprint, the following goals must be achieved
  
  **Figma:** [Link to UI design](https://www.figma.com/file/PVXHyekYD6Oxn2XmmPJXgU/Blockchain-network)
   
-### Chaincode update
+### ⛓️ Chaincode update
 * ```VaccineRecord(ctx, lotNo, vaccineID)``` - takes vaccine lot's number and vaccine's ID, returns all vaccines has 
 * ```IsFullyVaccinated(ctx, userID)``` - to check if a user's ID has taken enough vaccine doses (2 doses)
 
-### API endpoints
+### 📑 API endpoints
 * ```/vaccine/user/:userId``` - get vaccine's information of given user's ID
+* For /vaccine route - vaccine information, transfer
+  * POST /vaccine/manufacturer - create a new vaccine
+  * PUT /vaccine/manufacturer - transfer vaccine fomr manufacturer to distributor
+  * GET /vaccine/distributor - get a vaccine with given ID
+ 
+* For /logs route - get all of the logs
+  * GET /logs/manufacturer - get all transfered vaccine information
+  * GET /logs/distributor - return all retrive vaccine information from wholesaler
+ 
+* For vaccinate route - interact between vaccine and userID
+  * PUT /vaccinate - vaccinate the given userID
+  * GET /vaccinate - return vaccine state of given userID
 
-### User authentication
+### 🔑 User authentication
 * User register with citizen's ID and password.
 * Admin check and approve the citizen's information
 * 
 
-### Database schema 
+### 📘 Database schema 
 The vaccine transfer between ```Manufacturer```, ```Distributor```, ```MedicalUnit``` is in a lot. 
 For example, ```lotNo: M345``` from manufacturer ```owner: Moderna``` to distributor ```owner: KMedicine``` and finally send to medical unit ```owner: MedicHCMC```.
 Vaccine lot hit the final destination ```owner: MedicHCMC``` then each vaccine being indexed by unique vaccineID
