@@ -59,7 +59,6 @@ For example, ```lotNo: M345``` from manufacturer ```owner: manufacturer``` to di
 Vaccine lot hit the final destination ```owner: medicalunit``` then each vaccine being indexed by unique vaccineID
 * From ```Manufacturer```, ```Distributor```, ```MedicalUnit``` 
 
-  * ```docType``` - "vaccineLot"
   * ```vaccineLot``` - a unique vaccine lot's number
   * ```vaccineManufacturer``` - vaccine's manufacturer
   * ```vaccineName``` - vaccine's name, stated by manufacturer
