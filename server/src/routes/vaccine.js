@@ -28,6 +28,7 @@ app.get("/distributor", async (req, res) => {
 			const contract = await createContract();
 			let result = await contract.evaluateTransaction('GetVaccine',packaged_data_field1)
 			res.send(result);
+			console.log(remis)
 		} catch (err) {
 			console.error("error: " + err)
 			res.sendStatus(500)
