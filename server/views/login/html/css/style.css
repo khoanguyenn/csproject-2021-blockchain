@@ -1,0 +1,26 @@
+body {
+    background-image: url('./huong-dan-dang-ky-tiem-vaccine-covid-19.png'); 
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.form-container {
+    border: 1px solid #333;
+    border-radius: 25px;
+    padding: 30px 30px;
+    margin-top: 200px;
+    -webkit-box-shadow: inset 13px 13px 32px 12px rgba(127,194,219,1);
+    -moz-box-shadow: inset 13px 13px 32px 12px rgba(127,194,219,1);
+    box-shadow: inset 13px 13px 32px 12px rgba(127,194,219,1);
+    background-color: aliceblue;
+}
+
+.center {
+    text-align: center;
+    font-size: xx-large;
+}
+
