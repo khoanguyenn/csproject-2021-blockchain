@@ -1,9 +1,20 @@
+
 const express = require("express")
 const app = express.Router()
 const {createContract, disconnetGateway}=require('../../../blockchain/asset-transfer-ledger-queries/application-javascript/util/web_util')
 
 function prettyJSONString(inputString) {
 	return JSON.stringify(JSON.parse(inputString), null, 2);
+}
+function makeid(length) {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+      result += characters.charAt(Math.floor(Math.random() * 
+ charactersLength));
+   }
+   return result;
 }
 
 /**
@@ -17,6 +28,7 @@ app.get("/distributor", async (req, res) => {
 			const contract = await createContract();
 			let result = await contract.evaluateTransaction('GetVaccine',packaged_data_field1)
 			res.send(result);
+			console.log(remis)
 		} catch (err) {
 			console.error("error: " + err)
 			res.sendStatus(500)
@@ -28,7 +40,7 @@ app.get("/distributor", async (req, res) => {
 /**
  * @author Pham Minh Huy
  * @event POST request with a body {vaccineName: var2}to /vaccine/manufacturer
- * @returns add new vaccine with a randomizae ID to the ledger under factory-newlycreated state
+ * @returns add new vaccine with a randomized ID to the ledger under factory-newlycreated state
  */
 app.post("/manufacturer",async (req,res)=>{
 		try {
