@@ -14,10 +14,10 @@ const { buildCCPOrg1, buildWallet } = require('../../test-application/javascript
 
 const channelName = 'mychannel';
 const chaincodeName = 'ledger';
-const mspOrg1 = 'Org1MSP';
+const mspOrg1 = 'ManufacturerMSP';
 
 const walletPath = path.join(__dirname, 'wallet');
-const userId = 'appUser';
+const userId = 'appUser123';
 
 function prettyJSONString(inputString) {
 	return JSON.stringify(JSON.parse(inputString), null, 2);
@@ -83,7 +83,7 @@ async function main() {
 
 		// build an instance of the fabric ca services client based on
 		// the information in the network configuration
-		const caClient = buildCAClient(FabricCAServices, ccp, 'ca.org1.example.com');
+		const caClient = buildCAClient(FabricCAServices, ccp, 'ca.Manufacturer.example.com');
 
 		// setup the wallet to hold the credentials of the application user
 		const wallet = await buildWallet(Wallets, walletPath);
@@ -93,11 +93,12 @@ async function main() {
 
 		// in a real application this would be done only when a new user was required to be added
 		// and would be part of an administrative flow
-		await registerAndEnrollUser(caClient, wallet, mspOrg1, userId, 'org1.department1');
+		await registerAndEnrollUser(caClient, wallet, mspOrg1, userId, 'manufacturer.department1');
 
 		// Create a new gateway instance for interacting with the fabric network.
 		// In a real application this would be done as the backend server session is setup for
 		// a user that has been verified.
+
 		const gateway = new Gateway();
 
 		try {
@@ -116,7 +117,7 @@ async function main() {
 
 			// Get the contract from the network.
 			const contract = network.getContract(chaincodeName);
-
+			console.log("reached 3")
 			// Initialize a set of asset data on the channel using the chaincode 'InitLedger' function.
 			// This type of transaction would only be run once by an application the first time it was started after it
 			// deployed the first time. Any updates to the chaincode deployed later would likely not need to run

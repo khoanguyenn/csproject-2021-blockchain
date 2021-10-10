@@ -79,24 +79,15 @@ class ProviderChaincode extends Contract {
 		const vaccines = [
 			{
 				vaccineID: 'astra123',
-				vaccineName: 'astra',
-				vaccineManufacturer: 'org1',
-				owner: 'org1',
-				deliverTo: 'org1'
+				vaccineName: 'astra'
 			},
 			{
 				vaccineID: 'astra456',
-				vaccineName: 'astra',
-				vaccineManufacturer: 'org1',
-				owner: 'org1',
-				deliverTo: 'org1'
+				vaccineName: 'astra'
 			},
 			{
 				vaccineID: 'astra789',
-				vaccineName: 'astra',
-				vaccineManufacturer: 'org1',
-				owner: 'org1',
-				deliverTo: 'org1'
+				vaccineName: 'astra'
 			}
 		];
 

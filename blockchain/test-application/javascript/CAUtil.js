@@ -17,8 +17,9 @@ const adminUserPasswd = 'adminpw';
 exports.buildCAClient = (FabricCAServices, ccp, caHostName) => {
 	// Create a new CA client for interacting with the CA.
 	const caInfo = ccp.certificateAuthorities[caHostName]; //lookup CA details from config
+	console.log(caInfo)
 	const caTLSCACerts = caInfo.tlsCACerts.pem;
-	const caClient = new FabricCAServices(caInfo.url, { trustedRoots: caTLSCACerts, verify: false }, caInfo.caName);
+	const caClient = new FabricCAServices(caInfo.url, { trustedRoots: caTLSCACerts, verify: false }, caInfo.caName.toLowerCase());
 
 	console.log(`Built a CA Client named ${caInfo.caName}`);
 	return caClient;
@@ -35,6 +36,7 @@ exports.enrollAdmin = async (caClient, wallet, orgMspId) => {
 
 		// Enroll the admin user, and import the new identity into the wallet.
 		const enrollment = await caClient.enroll({ enrollmentID: adminUserId, enrollmentSecret: adminUserPasswd });
+		console.log(enrollment)
 		const x509Identity = {
 			credentials: {
 				certificate: enrollment.certificate,
@@ -54,6 +56,7 @@ exports.registerAndEnrollUser = async (caClient, wallet, orgMspId, userId, affil
 	try {
 		// Check to see if we've already enrolled the user
 		const userIdentity = await wallet.get(userId);
+		console.log(userIdentity);
 		if (userIdentity) {
 			console.log(`An identity for the user ${userId} already exists in the wallet`);
 			return;
@@ -78,10 +81,14 @@ exports.registerAndEnrollUser = async (caClient, wallet, orgMspId, userId, affil
 			enrollmentID: userId,
 			role: 'client'
 		}, adminUser);
+		console.log("Secret: " + secret);
 		const enrollment = await caClient.enroll({
 			enrollmentID: userId,
 			enrollmentSecret: secret
 		});
+
+
+		console.log("Enrollment: " + enrollment);
 		const x509Identity = {
 			credentials: {
 				certificate: enrollment.certificate,
@@ -90,6 +97,7 @@ exports.registerAndEnrollUser = async (caClient, wallet, orgMspId, userId, affil
 			mspId: orgMspId,
 			type: 'X.509',
 		};
+		console.log(userId)
 		await wallet.put(userId, x509Identity);
 		console.log(`Successfully registered and enrolled user ${userId} and imported it into the wallet`);
 	} catch (error) {
