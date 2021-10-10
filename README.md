@@ -30,13 +30,13 @@ Manufacturer functions
 * ```DeliverToDistributor(ctx, lotNo, toDistributor)``` - transfers vaccine from vaccine manufacturer to distributor
 * ```GetAllManufacturerLots(ctx)``` - get all a vaccine lot by manufacturer
 * ```GetManufacturerLot(ctx, lotNo)``` - get a vaccine lot of manufacturer
-* ```GetManufacturerLogs(ctx, lotNo)``` - get all manufacturer logs (depends on ```GetDeliveryLogs(ctx, lotNo)```)
+* ```GetManufacturerLogs(ctx, lotNo)``` - get all manufacturer logs 
 
 Distributor functions
 * ```DeliverToMedicalUnit(ctx, lotNo, toMedicalUnit)``` - vaccinate the given citizen's ID, same as giving a userID a vaccine
 * ```GetDistributorLots(ctx)``` - get a lot of vaccine of distributor by lot number
 * ```GetDistributorLot(ctx, lotNo)``` - get a vaccine lot of distributor
-* ```GetDistributorLogs(ctx, lotNot)``` - get all distributor logs (depends on ```GetDeliveryLogs(ctx, lotNo)```)
+* ```GetDistributorLogs(ctx, lotNot)``` - get all distributor logs 
 
 MedicalUnit functions
 * ```CheckVaccinateState(ctx, userID)``` - return array of vaccine of a specific user has taken
