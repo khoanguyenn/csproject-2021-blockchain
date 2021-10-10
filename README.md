@@ -42,11 +42,26 @@ Ultility functions
 * ```GetAllVaccines(ctx)``` - return all of the available vaccine in worldstate
 
 ## 📖 Database schema
-* ```vaccineID``` - a unique ID of the vaccine
-* ```vaccineName``` - vaccine's name
-* ```vaccineManufacturer``` - vaccine's manufacturer
-* ```owner``` - owner of the vaccine, could either manufacturer, distributor or citizens
-* ```deliverTo``` - current state of the owner ('org1', 'org2', 'user')
+The vaccine transfer between ```Manufacturer```, ```Distributor```, ```MedicalUnit``` is in a lot. 
+For example, ```lotNo: M345``` from manufacturer ```owner: Moderna``` to distributor ```owner: KMedicine``` and finally send to medical unit ```owner: MedicHCMC```.
+Vaccine lot hit the final destination ```owner: MedicHCMC``` then each vaccine being indexed by unique vaccineID
+* From ```Manufacturer```, ```Distributor```, ```MedicalUnit``` 
+
+  * ```vaccineLot``` - a unique vaccine lot's number
+  * ```vaccineManufacturer``` - vaccine's manufacturer
+  * ```vaccineName``` - vaccine's name, stated by manufacturer
+  * ```vaccineQuantity``` - number of vaccines available in a lot
+  * ```dateOfManufacture``` - vaccine's date of manufacture 
+  * ```owner``` - owner of the vaccine, could either manufacturer, distributor, medical unit or citizens
+
+* From ```MedicalUnit```
+
+  * ```vaccineId``` - a unique vaccineID
+  * ```vaccineManufacturer``` - vaccine's manufacturer
+  * ```vaccineName``` - vaccine's name, stated by manufacturer
+  * ```dateOfManufacture``` - vaccine's date of manufacture 
+  * ```owner``` - current owner of the vaccine, could either a medical unit or user's ID
+
 
 ## 📖 API endpoints
 
