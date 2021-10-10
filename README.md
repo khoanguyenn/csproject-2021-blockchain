@@ -55,8 +55,8 @@ Ultility functions
 
 ## 📖 Database schema
 The vaccine transfer between ```Manufacturer```, ```Distributor```, ```MedicalUnit``` is in a lot. 
-For example, ```lotNo: M345``` from manufacturer ```owner: Moderna``` to distributor ```owner: KMedicine``` and finally send to medical unit ```owner: MedicHCMC```.
-Vaccine lot hit the final destination ```owner: MedicHCMC``` then each vaccine being indexed by unique vaccineID
+For example, ```lotNo: M345``` from manufacturer ```owner: manufacturer``` to distributor ```owner: distributor``` and finally send to medical unit ```owner: medicalunit```.
+Vaccine lot hit the final destination ```owner: medicalunit``` then each vaccine being indexed by unique vaccineID
 * From ```Manufacturer```, ```Distributor```, ```MedicalUnit``` 
 
   * ```docType``` - "vaccineLot"
