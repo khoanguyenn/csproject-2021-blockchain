@@ -30,13 +30,13 @@ Manufacturer functions
 * ```DeliverToDistributor(ctx, lotNo, toDistributor)``` - transfers vaccine from vaccine manufacturer to distributor
 * ```GetAllManufacturerLots(ctx)``` - get all a vaccine lot by manufacturer
 * ```GetManufacturerLot(ctx, lotNo)``` - get a vaccine lot of manufacturer
-* ```GetManufacturerLogs(ctx, lotNo)``` - get all manufacturer logs 
+~~* ```GetManufacturerLogs(ctx, lotNo)``` - get all manufacturer logs 
 
 Distributor functions
 * ```DeliverToMedicalUnit(ctx, lotNo, toMedicalUnit)``` - vaccinate the given citizen's ID, same as giving a userID a vaccine
 * ```GetDistributorLots(ctx)``` - get a lot of vaccine of distributor by lot number
 * ```GetDistributorLot(ctx, lotNo)``` - get a vaccine lot of distributor
-* ```GetDistributorLogs(ctx, lotNot)``` - get all distributor logs 
+~~* ```GetDistributorLogs(ctx, lotNot)``` - get all distributor logs
 
 MedicalUnit functions
 * ```CheckVaccinateState(ctx, userID)``` - return array of vaccine of a specific user has taken
@@ -47,7 +47,7 @@ MedicalUnit functions
 Ultility functions
 * ```GetAllLotsOf(ctx, owner)``` - get all available vaccine lot of a owner
 * ```GetALotOf(ctx, owner, lotNo)``` - get a specific vaccin lot of a owner
-* ```GetDeliveryLogsOf(ctx, lotNo, owner)``` - get all of transfered vaccine information 
+~~* ```GetDeliveryLogsOf(ctx, lotNo, owner)``` - get all of transfered vaccine information 
 
 * ```VaccineExists(ctx, id)``` - returns true when vaccine with given ID exists in worldstate
 * ```GetAllVaccinesOf(ctx, owner)``` - get all vacine information of a specific owner
