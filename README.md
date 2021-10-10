@@ -25,18 +25,30 @@ Before getting started with the project, please carefully check out the followin
 Development functions
 * ```InitVacccines```, create a set of default vaccines
 
-Wholesale functions
-* ```CreateVaccine(ctx, name, vaccineID)``` - create a new vaccine with name and ID
-* ```DispatchVaccine(ctx, vaccineID, newOwner)``` - transfers vaccine from vaccine manufacturer to distributor
-* ```GetDispatchLogs(ctx)``` - get all of transfered vaccine information 
+Manufacturer functions
+* ```CreateVaccineLot(ctx, manufacturer, name, quantity, dateOfManufacture)``` - create a new vaccine with name and ID
+* ```DeliverToDistributor(ctx, lotNo, toDistributor)``` - transfers vaccine from vaccine manufacturer to distributor
+* ```GetAllManufacturerLots(ctx)``` - get all a vaccine lot by manufacturer
+* ```GetManufacturerLot(ctx, lotNo)``` - get a vaccine lot of manufacturer
+* ```GetManufacturerLogs(ctx, lotNo)``` - get all manufacturer logs (depends on ```GetDeliveryLogs(ctx, lotNo)```)
 
 Distributor functions
-* ```GetVaccine(ctx, vaccineID)``` - get a vaccine with given ID
-* ```VaccinateCitizen(ctx, vaccineID, userID)``` - vaccinate the given citizen's ID, same as giving a userID a vaccine
-* ```GetDeliveryLogs(ctx)``` - return all retrive vaccine information from wholesaler
-* ```CheckVaccinateState(ctx, userID)``` - return vaccine state of a specific user
+* ```DeliverToMedicalUnit(ctx, lotNo, toMedicalUnit)``` - vaccinate the given citizen's ID, same as giving a userID a vaccine
+* ```GetDistributorLots(ctx)``` - get a lot of vaccine of distributor by lot number
+* ```GetDistributorLot(ctx, lotNo)``` - get a vaccine lot of distributor
+* ```GetDistributorLogs(ctx, lotNot)``` - get all distributor logs (depends on ```GetDeliveryLogs(ctx, lotNo)```)
+
+MedicalUnit functions
+* ```CheckVaccinateState(ctx, userID)``` - return array of vaccine of a specific user has taken
+* ```IsFullyVaccinated(ctx, userID)``` - return true/false if the user is fully vaccinated
+* ```DivideVaccineLot(ctx, lotNo)``` - create number of of vaccine doses by vaccine's quantity in the lot, should look up all lot, then divide lot and commit to ledger
+* ```VaccinateCitizen(ctx, userID)``` - vaccinate a user's ID (update the owner field)
 
 Ultility functions
+* ```GetAllLotsOf(ctx, owner)``` - get all available vaccine lot of a owner
+* ```GetALotOf(ctx, owner, lotNo)``` - get a specific vaccin lot of a owner
+* ```GetDeliveryLogsOf(ctx, lotNo, owner)``` - get all of transfered vaccine information 
+
 * ```VaccineExists(ctx, id)``` - returns true when vaccine with given ID exists in worldstate
 * ```GetAllVaccinesOf(ctx, owner)``` - get all vacine information of a specific owner
 * ```GetAllVaccines(ctx)``` - return all of the available vaccine in worldstate
@@ -47,6 +59,7 @@ For example, ```lotNo: M345``` from manufacturer ```owner: Moderna``` to distrib
 Vaccine lot hit the final destination ```owner: MedicHCMC``` then each vaccine being indexed by unique vaccineID
 * From ```Manufacturer```, ```Distributor```, ```MedicalUnit``` 
 
+  * ```docType``` - "vaccineLot"
   * ```vaccineLot``` - a unique vaccine lot's number
   * ```vaccineManufacturer``` - vaccine's manufacturer
   * ```vaccineName``` - vaccine's name, stated by manufacturer
@@ -65,5 +78,19 @@ Vaccine lot hit the final destination ```owner: MedicHCMC``` then each vaccine b
 
 ## 📖 API endpoints
 
-* ```/register```
-* ```/login```
+* For ```/manufacturer``` route - vaccine information, transfer
+  * GET ```manufacturer/vaccines``` - get all vaccine lot of manufacturer
+  * GET ```manufacturer/vaccines/:vaccineID``` - get a vaccine lot of manufacturer
+  * POST ```manufacturer/vaccines``` - create a new vaccine lot
+  * PUT ```manufacturer/delivery``` - update new owner, transfer vaccine from manufacturer to distributor
+  * GET ```manfacturer/logs``` get all manufacturer's delivery logs
+
+* For ```/distributor``` route - get all of the logs
+  * GET ```/distributor/vaccines``` - get all vaccine lot of distributor
+  * GET ```/distributor/vaccines/:vaccineID``` -get a vaccine lot of distributor
+  * PUT ```/distributor/delivery``` - update new owner, transfer vaccine from distributor to medical unit
+  * GET ```distributor/logs``` get all distributor's delivery logs
+
+* For ```/medical-unit``` route - get all of the logs
+  * PUT ```/vaccinate``` - vaccinate the given userID
+  * GET ```/vaccinate``` - return vaccine state of given userID
