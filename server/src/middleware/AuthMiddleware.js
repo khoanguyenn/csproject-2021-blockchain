@@ -1,31 +1,15 @@
-//Global import
-const { Gateway, Wallets } = require('fabric-network');
-const FabricCAServices = require('fabric-ca-client');
 const bcrypt = require("bcrypt");
-const path = require('path');
-const express = require('express');
-const router = express.Router();
-
-//File path resolving 
-const { serverRoot } = require("../helpers/pathUtil");
-const caPath = path.join(serverRoot, 'src', 'helpers', 'CAUtil.js');
-const appPath = path.join(serverRoot, 'src', 'helpers', 'AppUtil.js');
-const walletPath = path.join(serverRoot, 'wallet');
-const salt = "$2b$10$J0HvW7R6cIMsagwfPPZ2JO";
 
 //Import helpers
-const { buildCAClient, registerAndEnrollUser} = require(caPath);
-const { buildCCPOrg1, buildWallet } = require(appPath);
+const AuthService = require("../helpers/AuthService");
 
 //Configuration
 const mspOrg1 = 'ManufacturerMSP';
+const salt = "$2b$10$J0HvW7R6cIMsagwfPPZ2JO";
 
+const connectToManufacturerCA = async (req, res, next) => {
+    const { caClient, ccp, wallet } = await AuthService.connectToCA("ca.Manufacturer.example.com")
 
-const connect2CA = async (req, res, next) => {
-    const ccp = buildCCPOrg1();
-    const wallet = await buildWallet(Wallets, walletPath);
-    const caClient = buildCAClient(FabricCAServices, ccp, 'ca.Manufacturer.example.com');
-    
     req.networkConnect = {
         caClient,
         ccp,
@@ -37,8 +21,8 @@ const connect2CA = async (req, res, next) => {
 const signup = async (req, res) => {
     try{
         const {username, password} = req.body;
-        const {caClient, ccp, wallet} = req.networkConnect;
         const concatStr = username + password;
+        const {caClient, ccp, wallet} = req.networkConnect;
         const userId = await bcrypt.hashSync(concatStr, salt);
 
         const userIdentity = await wallet.get(userId);
@@ -49,7 +33,7 @@ const signup = async (req, res) => {
 
         await registerAndEnrollUser(caClient, wallet, mspOrg1, userId, 'manufacturer.department1'); 
         console.log(await wallet.list())
-        res.send("what?")}
+        res.send(`User ${userId} sign up successfully!`)}
     catch(err){
         console.log("[ERROR]: " + err);
     }
@@ -58,10 +42,9 @@ const signup = async (req, res) => {
 const login = async (req, res) => {
     try{
         const {username, password} = req.body;
-        const {caClient, ccp, wallet} = req.networkConnect;
         const concatStr = username + password;
+        const {caClient, ccp, wallet} = req.networkConnect;
         const userId = await bcrypt.hashSync(concatStr, salt);
-    
         const userIdentity = await wallet.get(userId);
         console.log(userIdentity);
         if (userIdentity) {
@@ -82,7 +65,7 @@ const login = async (req, res) => {
 }
 
 module.exports = {
-    connect2CA: connect2CA,
+    connectToManufacturerCA,
     signup,
     login,
 };

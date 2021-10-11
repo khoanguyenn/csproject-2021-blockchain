@@ -3,8 +3,8 @@ const router = express.Router();
 
 const AuthMiddleware = require('../middleware/AuthMiddleware');
 
-router.post('/signup', AuthMiddleware.connect2CA, AuthMiddleware.signup);
-router.post('/login', AuthMiddleware.connect2CA, AuthMiddleware.login);
+router.post('/signup', AuthMiddleware.connectToManufacturerCA, AuthMiddleware.signup);
+router.post('/login', AuthMiddleware.connectToManufacturerCA, AuthMiddleware.login);
 
 
 module.exports = router;

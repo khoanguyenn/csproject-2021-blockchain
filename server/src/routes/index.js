@@ -1,6 +1,6 @@
-//Controller
+//Controllers
 const AuthController = require("../controllers/AuthController");
-const AuthMiddleware = require("../middleware/AuthMiddleware");
+
 
 const initApp = (app) => {
     app.use("/auth",  AuthController)
