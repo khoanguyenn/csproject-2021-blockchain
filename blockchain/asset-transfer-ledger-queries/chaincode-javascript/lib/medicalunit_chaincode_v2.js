@@ -75,6 +75,10 @@ class MedicalUnitChaincode extends Contract {
      * @param {*} userID 
      */
     async VaccinateCitizen(ctx, vaccineID, userID){
+		if (await this.CheckVaccinateState(ctx, userID)) {
+			throw new Error(`This user: ${userID} has fully vaccinated`);
+		}
+
         let vaccineAsBytes = await ctx.stub.getState(vaccineID);
         if (!vaccineAsBytes || !vaccineAsBytes.toString()) {
         	throw new Error(`Vaccine ${vaccineID} does not exist`);
