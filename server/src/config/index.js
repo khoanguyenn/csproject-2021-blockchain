@@ -13,7 +13,6 @@ const applyParserConfig = (app) => {
 }
 
 const applyTemplateEngine = (app) => {
-    console.log("Server root: " + path.join(__dirname, 'public'))
     app.use(express.static(path.join(serverRoot, 'public')));
     app.engine('handlebars', expressHbs());
     app.set('view engine', 'handlebars');
