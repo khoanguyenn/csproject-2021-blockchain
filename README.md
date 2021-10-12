@@ -16,9 +16,9 @@ Before getting started with the project, please carefully check out the followin
 
 ## :dizzy: Current state
 - [x] Basic folder structure
-- [ ] Hyperledger Fabric blockchain network
-- [ ] CouchDB database schema
-- [ ] System workflow
+- [x] Hyperledger Fabric blockchain network
+- [x] CouchDB database schema
+- [x] System workflow
 
 ## ⛓️ Chaincode function
 
@@ -36,19 +36,18 @@ Distributor functions
 * ```DeliverToMedicalUnit(ctx, lotNo, toMedicalUnit)``` - vaccinate the given citizen's ID, same as giving a userID a vaccine
 * ```GetDistributorLots(ctx)``` - get a lot of vaccine of distributor by lot number
 * ```GetDistributorLot(ctx, lotNo)``` - get a vaccine lot of distributor
-~* GetDistributorLogs(ctx, lotNot)``` - get all distributor logs
+* ```GetDistributorLogs(ctx, lotNot)``` - get all distributor logs
 
 MedicalUnit functions
 * ```CheckVaccinateState(ctx, userID)``` - return array of vaccine of a specific user has taken
 * ```IsFullyVaccinated(ctx, userID)``` - return true/false if the user is fully vaccinated
-* ```DivideVaccineLot(ctx, lotNo)``` - create number of of vaccine doses by vaccine's quantity in the lot, should look up all lot, then divide lot and commit to ledger
+* ```DivideVaccineLot(ctx, lotNo)``` - create number of vaccine doses by vaccine's quantity in the lot, should look up all lot, then divide lot and commit to ledger
 * ```VaccinateCitizen(ctx, userID)``` - vaccinate a user's ID (update the owner field)
 
 Ultility functions
 * ```GetAllLotsOf(ctx, owner)``` - get all available vaccine lot of a owner
 * ```GetALotOf(ctx, owner, lotNo)``` - get a specific vaccin lot of a owner
 * ```GetDeliveryLogsOf(ctx, lotNo, owner)``` - get all of transfered vaccine information
-
 * ```VaccineExists(ctx, id)``` - returns true when vaccine with given ID exists in worldstate
 * ```GetAllVaccinesOf(ctx, owner)``` - get all vacine information of a specific owner
 * ```GetAllVaccines(ctx)``` - return all of the available vaccine in worldstate
@@ -91,5 +90,6 @@ Vaccine lot hit the final destination ```owner: medicalunit``` then each vaccine
   * GET ```distributor/logs``` get all distributor's delivery logs
 
 * For ```/medical-unit``` route - get all of the logs
+  * POST ```/vaccinate``` - create number of vaccine does by available vaccine's lot
   * PUT ```/vaccinate``` - vaccinate the given userID
-  * GET ```/vaccinate``` - return vaccine state of given userID
+  * GET ```/vaccinate``` - return array of vaccine of a specific user has taken
