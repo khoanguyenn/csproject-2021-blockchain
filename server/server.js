@@ -6,7 +6,7 @@ const config = require('./src/config')
 
 //Configuration
 config.applyParserConfig(app);
-config.applyServingConfig(app);
+config.applyTemplateEngine(app);
 
 //Routes apply
 initApp(app);

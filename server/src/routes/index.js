@@ -1,5 +1,6 @@
 //Controllers
 const AuthController = require("../controllers/AuthController");
+const TestController = require('../controllers/TestController');
 
 
 const initApp = (app) => {
@@ -7,6 +8,8 @@ const initApp = (app) => {
     app.use("/manufacturer", (req, res) => {console.log("Manufacturer route is here!"); res.send("manufacturer")});
     app.use("/distributor", (req, res) => {console.log("Distributor route is here!"); res.send("distributor")})
     app.use("/medical-unit", (req, res) => {console.log("Medical Unit route is here!"); res.send("medical unit")})
+
+    app.use('/test', TestController)
 }
 
 module.exports = initApp;

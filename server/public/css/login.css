@@ -1,5 +1,5 @@
 body {
-    background-image: url('./huong-dan-dang-ky-tiem-vaccine-covid-19.png'); 
+    background-image: url('/images/huong-dan-dang-ky-tiem-vaccine-covid-19.png'); 
     background-repeat: no-repeat;
     background-attachment: fixed;
     -webkit-background-size: cover;
@@ -24,3 +24,6 @@ body {
     font-size: xx-large;
 }
 
+.red-color {
+    color: red;
+}

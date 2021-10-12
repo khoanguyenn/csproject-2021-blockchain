@@ -1,7 +1,10 @@
+const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser')
 const cookieParser = require("cookie-parser");
+const expressHbs = require('express-handlebars');
 
-const { serverRoot } = require("../helpers/pathUtil");
+const { serverRoot, blockchainRoot, rootDir } = require("../helpers/pathUtil");
 
 const applyParserConfig = (app) => {
     app.use(cookieParser())
@@ -9,11 +12,14 @@ const applyParserConfig = (app) => {
     app.use(bodyParser.urlencoded({extended: false}))
 }
 
-const applyServingConfig = (app) => {
-    app.use(express.static(path.join(serverRoot, "views")))
+const applyTemplateEngine = (app) => {
+    console.log("Server root: " + path.join(__dirname, 'public'))
+    app.use(express.static(path.join(serverRoot, 'public')));
+    app.engine('handlebars', expressHbs());
+    app.set('view engine', 'handlebars');
 }
 
 module.exports = {
     applyParserConfig,
-    applyServingConfig,
+    applyTemplateEngine,
 };
