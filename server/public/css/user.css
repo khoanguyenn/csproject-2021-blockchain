@@ -233,6 +233,8 @@ body {
     font-weight: 600;
     padding: 10px 27px 10px 45px;
     position: relative;
+    text-align: center;
+    font-size: x-large;
 }
 
 .header-rightside .nav > li > a:focus,
