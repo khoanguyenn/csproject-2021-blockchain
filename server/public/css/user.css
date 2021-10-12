@@ -7,6 +7,13 @@ li,ul{
     padding: 0;
     margin: 0;
 }
+
+body {
+    height: 100vh;
+}
+
+
+
 .header-top i {
     font-size: 18px;
 }
@@ -171,8 +178,6 @@ li,ul{
 }
 
 
-/*Login Signup Page*/
-
 
 /*Home Page*/
 
@@ -180,13 +185,7 @@ li,ul{
     background: #f6f7fa;
 }
 
-#navigation {
-    background: #0e1a35;
-}
 
-#navigation {
-    padding: 0;
-}
 
 .display-table {
     display: table;
@@ -344,10 +343,43 @@ header {
     transition: all 0.5s ease;
 }
 
+/*==========================NAVIGATOR==========================*/
+
+/*Navigator logo*/
 .logo {
+    box-sizing: border-box;
+    height: 20%;
+    margin-top: 2rem;
     text-align: center;
 }
 
+.logo i {
+    color: #5584ff;
+    font-size: 2rem;
+}
+.logo span {
+    color:#f6f7fa;
+    font-size: 1.3rem;
+    font-weight: bold;
+    margin-left: 1rem;
+}
+
+#navigation {
+    background: #0e1a35;
+    box-shadow: 0 10px 15px grey;
+}
+
+#navigation {
+    padding: 0;
+    height: 100%;
+}
+
+.navi {
+    display: flex;
+    flex-direction: column;
+    height: 75%;
+
+}
 .navi a {
     border-bottom: 1px solid #0d172e;
     border-top: 1px solid #0d172e;
@@ -364,6 +396,12 @@ header {
     color: #5584ff;
 }
 
+.navi ul {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 .navi .active a {
     background: #122143;
     border-left: 5px solid #5584ff;
@@ -375,6 +413,7 @@ header {
     border-left: 5px solid #5584ff;
     display: block;
     padding-left: 15px;
+    text-decoration: none;
 }
 
 .navbar-default {
@@ -406,6 +445,7 @@ header {
     -o-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
+
 
 .user-dashboard {
     padding: 0 20px;
