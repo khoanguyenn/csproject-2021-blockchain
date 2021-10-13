@@ -29,7 +29,7 @@ async CreateVaccineLot(ctx, manufacturer, name, quantity) {
 			vaccineLotName: name,
                         lotNo: lotNo,
 	        	vaccineManufacturer: manufacturer,
-			vaccineQuanity: quanity,
+			vaccineQuanity: quantity,
 			dateOfManufacturer:dateOfManufacture,
                         owner: manufacturer
 		};
@@ -46,27 +46,28 @@ async CreateVaccineLot(ctx, manufacturer, name, quantity) {
      */
 
 async DeliverToDistributor(ctx, lotNo){
-                let vaccineLotAsBytes = await ctx.stub.getState(lotNo);
+               
+    let vaccineLotAsBytes = await ctx.stub.getState(lotNo);
+    if (!vaccineLotAsBytes || !vaccineLotAsBytes.toString()) {
+      throw new Error(`Vaccine lot ${lotNo} does not exist`);
+    }
+    let vaccineLotToTranfer = {};
+    try {
+      vaccineLotToTranfer = JSON.parse(vaccineLotAsBytes.toString()); 
+    } catch (err) {
+      let jsonResp = {};
+      jsonResp.error = 'Failed to decode JSON of: ' + lotNo;
+      throw new Error(jsonResp);
+    }
+    if(vaccineLotToTranfer.owner!=='manufacturer'){
+      throw new Error(`Vaccine lot ${lotNo} does not available at the manufacturer`);
+    }
+    vaccineLotToTranfer.owner = 'distributor'; 
 
-                if (!vaccineLotAsBytes || !vaccineLotAsBytes.toString()) {
-			throw new Error(`Asset ${lotNo} does not exist`);
-		}
-
-		let vaccineLotToTransfer = {};
-
-		try {
-			vaccineLotToTransfer = JSON.parse(vaccineLotAsBytes.toString()); 
-		} catch (err) {
-			let jsonResp = {};
-			jsonResp.error = 'Failed to decode JSON of: ' + lotNo;
-			throw new Error(jsonResp);
-		}
-		vaccineLotToTransfer.owner = 'distributor'; 
-
-
-		let vaccineLotJSONasBytes = Buffer.from(JSON.stringify(vaccineLotToTransfer));
-		await ctx.stub.putState(lotNo, vaccineLotJSONasBytes); 
-	}
+  
+    let vaccineLotJSONasBytes = Buffer.from(JSON.stringify(vaccineLotToTranfer));
+    await ctx.stub.putState(lotNo, vaccineLotJSONasBytes); 
+  }
 
 
   /** 
@@ -76,13 +77,82 @@ async DeliverToDistributor(ctx, lotNo){
      * @returns  get a vaccine lot of manufacturer
     */
 	async GetManufacturerLot(ctx, lotNo){
-		let queryString = {};
-  		queryString.selector = {};
-		queryString.selector.lotNo = lotNo;
-		return await this.GetQueryResultForQueryString(ctx, JSON.stringify(queryString)); 
-	}
+	const vaccineLotJSON = await ctx.stub.getState(lotNo); 
+    if (!vaccineLotJSON || vaccineLotJSON.length === 0) {
+      throw new Error(`Vaccine lot ${lotNo} does not exist`);
+    }
+
+    let vaccineLotToTranfer = {};
+    try {
+      vaccineLotToTranfer = JSON.parse(vaccineLotJSON.toString()); 
+    } catch (err) {
+      let jsonResp = {};
+      jsonResp.error = 'Failed to decode JSON of: ' + lotNo;
+      throw new Error(jsonResp);
+    }
+    if(vaccineLotToTranfer.owner!=='manufacturer'){
+      throw new Error(`Vaccine lot ${lotNo} does not available at the manufacturer`);
+    }
+   
+
+    return vaccineLotJSON.toString();
+  }
+	
+  /** 
+     * @returns  delete the given lot's number
+    */
+	
+async DeleteManufacturerLot(ctx, lotNo) {
+  
+  let vaccineLotAsBytes = await ctx.stub.getState(lotNo);
+  if (!vaccineLotAsBytes || !vaccineLotAsBytes.toString()) {
+    throw new Error(`Vaccine lot ${lotNo} does not exist`);
+  }
+  let vaccineLotToTranfer = {};
+  try {
+    vaccineLotToTranfer = JSON.parse(vaccineLotAsBytes.toString()); 
+  } catch (err) {
+    let jsonResp = {};
+    jsonResp.error = 'Failed to decode JSON of: ' + lotNo;
+    throw new Error(jsonResp);
+  }
+  if(vaccineLotToTranfer.owner!=='manufacturer'){
+    throw new Error(`Vaccine lot ${lotNo} does not available at the manufacturer`);
+  }
+  await ctx.stub.deleteState(lotNo);
+}
+	
+  /** 
+     * @returns  update new infomation of the lot
+    */
+	
+async UpdateManufacturerLot(ctx, lotNo,name,quantity,dateOfManufacture) {
+  
+  let vaccineLotAsBytes = await ctx.stub.getState(lotNo);
+  if (!vaccineLotAsBytes || !vaccineLotAsBytes.toString()) {
+    throw new Error(`Vaccine lot ${lotNo} does not exist`);
+  }
+  let vaccineLotToTranfer = {};
+  try {
+    vaccineLotToTranfer = JSON.parse(vaccineLotAsBytes.toString()); 
+  } catch (err) {
+    let jsonResp = {};
+    jsonResp.error = 'Failed to decode JSON of: ' + lotNo;
+    throw new Error(jsonResp);
+  }
+  if(vaccineLotToTranfer.owner!=='manufacturer'){
+    throw new Error(`Vaccine lot ${lotNo} does not available at the manufacturer`);
+  }
+  vaccineLotToTranfer.vaccineName=name;
+  vaccineLotToTranfer.vaccineQuantity=quantity
+  vaccineLotToTranfer.dateOfManufacturer=dateOfManufacture;
 
 
+  let vaccineLotJSONasBytes = Buffer.from(JSON.stringify(vaccineLotToTranfer));
+  await ctx.stub.putState(lotNo, vaccineLotJSONasBytes); 
+}
+
+	
 /** 
  * @author: Huynh Nhut Anh
  * @param {*} ctx
@@ -148,7 +218,8 @@ async GetManufacturerLogs(ctx) {
 async GetAllManufacturerLots(ctx){
 		let queryString ={};
 		queryString.selector={};
-		queryString.selector.docType=`vaccineLot`;
+		queryString.selector.docType='vaccineLot';
+	        queryString.selector.owner = 'manufacturer';
 		return await this.GetQueryResultForQueryString(ctx, JSON.stringify(queryString)); 
 	}
 
@@ -191,6 +262,7 @@ async GetAllManufacturerLots(ctx){
 
 		await ctx.stub.putState(vaccineID, Buffer.from(JSON.stringify(vaccine)));
 	}
+	
 async VaccineExists(ctx, vaccine) {
 		let assetState = await ctx.stub.getState(vaccine);	
 		return  assetState && (assetState.length > 0);

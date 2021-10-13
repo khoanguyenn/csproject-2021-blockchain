@@ -89,6 +89,67 @@ class DistributorChaincode extends Contract {
     return await this.GetQueryResultForQueryString(ctx, JSON.stringify(queryString)); 
   }
   
+  /** 
+   * @author: Ha Xuan Huy
+   * @param {*} ctx
+   * @param {String} lotNo
+   * @param {String} name
+   * @param {int} quantity
+   * @param {String} dateOfManufacture
+   * @returns Updated a vaccine lot in distributor with given ID
+  */
+async UpdateDistributorLot(ctx, lotNo,name,quantity,dateOfManufacture) {
+  
+  let vaccineLotAsBytes = await ctx.stub.getState(lotNo);
+  if (!vaccineLotAsBytes || !vaccineLotAsBytes.toString()) {
+    throw new Error(`Vaccine lot ${lotNo} does not exist`);
+  }
+  let vaccineLotToVaccinate = {};
+  try {
+    vaccineLotToVaccinate = JSON.parse(vaccineLotAsBytes.toString()); 
+  } catch (err) {
+    let jsonResp = {};
+    jsonResp.error = 'Failed to decode JSON of: ' + lotNo;
+    throw new Error(jsonResp);
+  }
+  if(vaccineLotToVaccinate.owner!=='distributor'){
+    throw new Error(`Vaccine lot ${lotNo} does not available at the distributor`);
+  }
+  vaccineLotToVaccinate.vaccineName=name;
+  vaccineLotToVaccinate.vaccineQuantity=quantity
+  vaccineLotToVaccinate.dateOfManufacturer=dateOfManufacture;
+
+
+  let vaccineLotJSONasBytes = Buffer.from(JSON.stringify(vaccineLotToVaccinate));
+  await ctx.stub.putState(lotNo, vaccineLotJSONasBytes); 
+}
+
+/** 
+   * @author: Ha Xuan Huy
+   * @param {*} ctx
+   * @param {String} lotNo
+   * @returns delete a vaccine lot in distributor with given ID
+  */
+async DeleteDistributorLot(ctx, lotNo) {
+  
+  let vaccineLotAsBytes = await ctx.stub.getState(lotNo);
+  if (!vaccineLotAsBytes || !vaccineLotAsBytes.toString()) {
+    throw new Error(`Vaccine lot ${lotNo} does not exist`);
+  }
+  let vaccineLotToVaccinate = {};
+  try {
+    vaccineLotToVaccinate = JSON.parse(vaccineLotAsBytes.toString()); 
+  } catch (err) {
+    let jsonResp = {};
+    jsonResp.error = 'Failed to decode JSON of: ' + lotNo;
+    throw new Error(jsonResp);
+  }
+  if(vaccineLotToVaccinate.owner!=='distributor'){
+    throw new Error(`Vaccine lot ${lotNo} does not available at the distributor`);
+  }
+  await ctx.stub.deleteState(lotNo);
+}
+  
   //helper functions 
   async GetQueryResultForQueryString(ctx, queryString) {
     let resultsIterator = await ctx.stub.getQueryResult(queryString);

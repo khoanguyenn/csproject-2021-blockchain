@@ -30,12 +30,16 @@ Manufacturer functions
 * ```DeliverToDistributor(ctx, lotNo, toDistributor)``` - transfers vaccine from vaccine manufacturer to distributor
 * ```GetAllManufacturerLots(ctx)``` - get all a vaccine lot by manufacturer
 * ```GetManufacturerLot(ctx, lotNo)``` - get a vaccine lot of manufacturer
+* ```UpdateManufacturerLot(ctx, lotNo, name, quantity, dateOfManufacture)``` - update new infomation of the lot
+* ```DeleteManufacturerLot(ctx, lotNo)``` - delete the given lot's number
 * ```GetManufacturerLogs(ctx, lotNo)``` - get all manufacturer logs 
 
 Distributor functions
 * ```DeliverToMedicalUnit(ctx, lotNo, toMedicalUnit)``` - vaccinate the given citizen's ID, same as giving a userID a vaccine
 * ```GetDistributorLots(ctx)``` - get a lot of vaccine of distributor by lot number
 * ```GetDistributorLot(ctx, lotNo)``` - get a vaccine lot of distributor
+* ```UpdateDistributorLot(ctx, lotNo, name, quantity, dateOfManufacture)``` - update new infomation of the lot
+* ```DeleteDistributorLot(ctx, lotNo)``` - delete the given lot's number
 * ```GetDistributorLogs(ctx, lotNot)``` - get all distributor logs
 
 MedicalUnit functions
@@ -80,13 +84,17 @@ Vaccine lot hit the final destination ```owner: medicalunit``` then each vaccine
   * GET ```manufacturer/vaccines``` - get all vaccine lot of manufacturer
   * GET ```manufacturer/vaccines/:vaccineID``` - get a vaccine lot of manufacturer
   * POST ```manufacturer/vaccines``` - create a new vaccine lot
+  * PUT ```manufacturer/vaccines``` - update new vaccine lot's information
+  * DELETE ```manufacturer/vaccines``` - delete the vaccine lot
   * PUT ```manufacturer/delivery``` - update new owner, transfer vaccine from manufacturer to distributor
   * GET ```manfacturer/logs``` get all manufacturer's delivery logs
 
-* For ```/distributor``` route - get all of the logs
-  * GET ```/distributor/vaccines``` - get all vaccine lot of distributor
-  * GET ```/distributor/vaccines/:vaccineID``` -get a vaccine lot of distributor
-  * PUT ```/distributor/delivery``` - update new owner, transfer vaccine from distributor to medical unit
+* For ```distributor``` route - get all of the logs
+  * GET ```distributor/vaccines``` - get all vaccine lot of distributor
+  * GET ```distributor/vaccines/:vaccineID``` - get a vaccine lot of distributor
+  * PUT ```distributor/vaccines``` - update new vaccine lot's information
+  * DELETE ```distributor/vaccines``` - delete the vaccine lot
+  * PUT ```distributor/delivery``` - update new owner, transfer vaccine from distributor to medical unit
   * GET ```distributor/logs``` get all distributor's delivery logs
 
 * For ```/medical-unit``` route - get all of the logs

@@ -85,4 +85,51 @@ const {createContract, disconnetGateway}=require('../helpers/web_util')
   }
 })
 
+
+// PUT /distributor/vaccines with body request {"vaccineLot":"value","name":"value","quantity":"value","dateOfManufacture":"value"}
+/**
+ * @author Ha Xuan Huy
+ * @returns update a vaccine lot in distributor with specific ID
+ */
+ router.put("/vaccines", async function (req, res) {
+  
+  try {
+      var key1 =String(req.body.vaccineLot)
+      var key2 =String(req.body.name)
+      var key3 =String(req.body.quantity)
+      var key4 =String(req.body.dateOfManufacture)
+      const contract = await createContract();
+
+      console.log(`Update information of vaccine lot ${key1} in distributor `)
+      await contract.submitTransaction('UpdateDistributorLot', key1,key2,key3,key4) 
+      res.sendStatus(200)
+  } catch (err) {
+      console.error("error: " + err)
+      res.sendStatus(500)
+  } finally {
+    disconnetGateway();
+  }
+})
+//DELETE /distributor/vaccines with body request {"vaccineLot":"value"}
+/**
+ * @author Ha Xuan Huy
+ * @returns delete a vaccine lot with specific ID in distributor
+ */
+ router.delete("/vaccines", async function (req, res) {
+  
+  try {
+      var key =String(req.body.vaccineLot)
+      const contract = await createContract();
+
+      console.log(`Delete the vaccine lot ${key} in distributor `)
+      await contract.submitTransaction('DeleteDistributorLot', key) 
+      res.sendStatus(200)
+  } catch (err) {
+      console.error("error: " + err)
+      res.sendStatus(500)
+  } finally {
+    disconnetGateway();
+  }
+})
+
 module.exports = router
