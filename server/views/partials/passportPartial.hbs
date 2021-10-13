@@ -1,25 +1,62 @@
-<div class="col-md-10 col-sm-11 display-table-cell v-align">
-    <div class="row">
-        <header>
-            <div class="col-md-7">
-                <nav class="navbar-default pull-left">
-                    <div class="navbar-header">
-                    </div>
-                </nav>
-            </div>
-            <div class="col-md-5">
-                <div class="header-rightside">
-                    <ul class="list-inline header-top pull-right">
-                        <li class="hidden-xs"><a class="add-project">Welcome to Vaccinate System Project of Team Lion</a></li>
-                    </ul>
+<div class="col-md-10 col-sm-11 p-3 d-flex flex-column justify-content-between">
+        <header class="mb-3">
+            <h1>Lion's vaccine system</h1>
+        </header>
+        <section class="d-flex">
+            <div class="card mx-auto" style="width: 25rem; height: 35rem">
+                <img class="card-img-top" src="https://file3.qdnd.vn/data/images/0/2021/10/08/vuongthuy/09102021vthuy1.jpg?dpi=150&quality=100&w=870" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Vo Thanh Minh Khoi</h5>
+                    <span class="badge bg-primary text-light">AstraZeneca</span>
+                    <span class="badge bg-success text-light">Taken</span>
+                    <p class="card-text mt-2">This card indicate that you have taken the first vaccine dose</p>
+                    <button href="#" class="btn btn-primary" data-toggle="modal" data-target="#moreInfo" data-whatever="Khoa">See details</button>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                 </div>
             </div>
-        </header>
-        <section>
-            Hello world
+            <div class="card mx-auto" style="width: 25rem; height: 35rem">
+                <img class="card-img-top" src="https://file3.qdnd.vn/data/images/0/2021/10/08/vuongthuy/09102021vthuy1.jpg?dpi=150&quality=100&w=870" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">Vo Thanh Minh Khoi</h5>
+                    <span class="badge bg-primary text-light">AstraZeneca</span>
+                    <span class="badge bg-secondary text-light">Waiting...</span>
+                    <p class="card-text mt-2">This card indicate that you have taken the first vaccine dose</p>
+                    <a href="#" class="btn btn-primary">See details</a>
+                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
+                </div>
+            </div>
+
         </section>
-        <footer>
+        <footer class="text-right">
             Copyright by Khoi and Khoa
         </footer>
+</div>
+
+<div class="modal fade" id="moreInfo" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label">Recipient:</label>
+            <input type="text" class="form-control" id="recipient-name">
+          </div>
+          <div class="form-group">
+            <label for="message-text" class="col-form-label">Message:</label>
+            <textarea class="form-control" id="message-text"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Send message</button>
+      </div>
     </div>
+  </div>
 </div>

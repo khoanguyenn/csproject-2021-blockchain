@@ -67,6 +67,10 @@ class MedicalUnitChaincode extends Contract {
 			// const vaccineID = vaccineLotObject.vaccineLot + i;
 			// await this.CreateVaccine(ctx, vaccineID, 'astra');
 		}
+		vaccineLotObject.vaccineQuantity = '0';
+		let vaccineLotAsBytes = Buffer.from(JSON.stringify(vaccineLotObject));
+		await ctx.stub.putState(lotNo, vaccineLotAsBytes); 
+
     }
 
     /**
