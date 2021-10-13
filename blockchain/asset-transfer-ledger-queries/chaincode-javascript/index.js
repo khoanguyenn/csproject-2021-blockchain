@@ -7,7 +7,7 @@
 
 'use strict';
 
-const CC = require('./lib/vaccine_chaincode');
+const CC = require('./lib/vaccine_chaincode_v2');
 
 module.exports.CC = CC;
 module.exports.contracts = [ CC ];
