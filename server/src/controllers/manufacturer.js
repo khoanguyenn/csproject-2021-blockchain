@@ -64,7 +64,7 @@ const {createContract, disconnetGateway}=require('../helpers/web_util')
 })
 
 
-// PUT /distributor/delivery with body request {"vaccineLot":"value"}
+
 /**
  
  * @returns  update new owner, transfer vaccine from manufacturer to distributor
