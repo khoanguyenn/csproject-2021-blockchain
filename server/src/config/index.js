@@ -14,8 +14,13 @@ const applyParserConfig = (app) => {
 
 const applyTemplateEngine = (app) => {
     app.use(express.static(path.join(serverRoot, 'public')));
-    app.engine('handlebars', expressHbs());
-    app.set('view engine', 'handlebars');
+    app.engine('hbs', expressHbs({
+        extname: 'hbs',
+        defaultLayout: 'main',
+        layoutsDir: path.resolve(serverRoot, 'views', 'layouts'),
+        partialsDir: path.resolve(serverRoot, 'views', 'partials'),
+    }));
+    app.set('view engine', 'hbs');
 }
 
 module.exports = {
