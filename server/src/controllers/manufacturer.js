@@ -10,6 +10,7 @@ const {createContract, disconnetGateway}=require('../helpers/web_util')
  * @returns all vaccine lot of manufacturer
  */
  router.get("/vaccines", async function (req, res) {
+  
   try {
       const contract = await createContract();
 
@@ -29,21 +30,19 @@ const {createContract, disconnetGateway}=require('../helpers/web_util')
 /**
  * @returns create a new vaccine lot
  */
- router.post("/vaccines", async function (req, res) {
-  try {
-      const contract = await createContract();
-
-      console.log(`create a new vaccine lot`)
-      let data = await contract.evaluateTransaction('CreateVaccineLot') 
-      res.status(200).json(JSON.parse(data.toString()))
-      
-  } catch (err) {
-      console.error("error: " + err)
-      res.send(500)
-  } finally {
-    disconnetGateway();
-  }
-})
+router.post('/vaccines', async function (req, res){
+    let vaccineLotID = String(req.body.vaccineLot)
+    try {
+        const contract = await createContract();
+        await contract.submitTransaction('CreateVaccineLot', vaccineLotID);
+        res.sendStatus(200)
+    } catch (error) {
+        console.log('error: ' + error);
+        res.send(404);
+    } finally {
+        disconnetGateway();
+    }
+})  
 
 /**
  * @returns a vaccine lot with given ID from manufacturer
