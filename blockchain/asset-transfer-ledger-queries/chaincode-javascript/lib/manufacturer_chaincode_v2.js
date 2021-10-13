@@ -286,7 +286,7 @@ async VaccineExists(ctx, vaccine) {
         vaccine.vaccineID,
         vaccine.vaccineName
       );
-    }
+    }}
 
 
     // *********************** helper functions *****************************

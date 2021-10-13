@@ -556,6 +556,9 @@ for (let i = 0; i < size; i++) {
   const vaccineID = lotNo.substring(0,5) + i;
    await this.CreateVaccine(ctx,vaccineID,vaccineLotObject.vaccineName,vaccineLotObject.vaccineManufacturer,vaccineLotObject.dateOfManufacture)
 }
+vaccineLotObject.vaccineQuantity = '0';
+let vaccineLotAsBytes = Buffer.from(JSON.stringify(vaccineLotObject));
+await ctx.stub.putState(lotNo, vaccineLotAsBytes); 
 }
 
 async GetALotOf(ctx, owner, lotNo) {

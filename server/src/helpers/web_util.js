@@ -3,7 +3,7 @@ const { Wallets, Gateway } = require('fabric-network');
 const path = require('path');
 //const { buildCCPOrg1, buildWallet } = require('../../../../server/utils/javascript/AppUtil.js.js');
 
-const walletPath = path.join(__dirname, '../wallet');
+const walletPath = path.join(__dirname, '../../wallet');
 const channelName = 'mychannel';
 const chaincodeName = 'ledger';
 let gateway;
