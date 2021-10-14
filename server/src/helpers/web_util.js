@@ -2,7 +2,7 @@
 const { Wallets, Gateway } = require('fabric-network');
 const path = require('path');
 //const { buildCCPOrg1, buildWallet } = require('../../../../server/utils/javascript/AppUtil.js.js');
-
+const { buildCCPOrg1, buildWallet } =require('../helpers/AppUtil')// Note _Pham Minh Huy: you guys missed this line, rendering contract creation failure
 const walletPath = path.join(__dirname, '../../wallet');
 const channelName = 'mychannel';
 const chaincodeName = 'ledger';
