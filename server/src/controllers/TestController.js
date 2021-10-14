@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 
-const TestMiddleware = require('../middleware/TestMiddleware');
+const RenderMiddleware = require('../middleware/RenderMiddleware');
 
-router.get('/login', TestMiddleware.login);
-router.post('/login', TestMiddleware.getInfo)
+router.get('/login', RenderMiddleware.loginPage);
+router.post('/login', RenderMiddleware.getInfo)
 
-router.get('/user', TestMiddleware.userPage)
+router.get('/user', RenderMiddleware.userPage)
 
 module.exports = router;

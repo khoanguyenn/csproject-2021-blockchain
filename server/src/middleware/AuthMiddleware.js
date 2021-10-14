@@ -32,13 +32,15 @@ const signup = async (req, res) => {
 
         //Find the available identities
         const userIdentity = await wallet.get(userId);
-        if (userIdentity) {
+        if (!userIdentity) {
 			throw Error(`An identity for the user ${userId} already exists in the wallet`);
         }
 
         //Enroll new user
         await registerAndEnrollUser(caClient, wallet, mspOrg1, userId, 'manufacturer.department1'); 
-        console.log(await wallet.list())
+        // console.log(await wallet.list())
+
+        req.userId = userId;
         res.send(`User ${userId} sign up successfully!`);
     }
     catch(err){
@@ -47,7 +49,7 @@ const signup = async (req, res) => {
     }
 }
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
     try{
         const {username, password} = req.body;
         const concatStr = username + password;
@@ -55,19 +57,21 @@ const login = async (req, res) => {
 
         //Check the available user identity
         const userId = await bcrypt.hashSync(concatStr, salt);
+
         const userIdentity = await wallet.get(userId);
-        //console.log(userIdentity);
         if (!userIdentity) {
             throw Error("Invalid username and password!");
         }
 
+        req.userId = userId;
         res.cookie("userId", userId, {maxAge: 60 * 60 * 24});
-        res.send(`Access granted for ${userId}`);
+        next();
     }
     catch(err){
         console.log("[ERROR]: " + err);
         res.status(400).send(err);
     }
+
 }
 
 const verifyToken = async (req, res, next) => {
@@ -93,8 +97,10 @@ const verifyToken = async (req, res, next) => {
  * whether the given user's id belongs to manufacturer
  */
 const isManufacturer = async (req, res, next) => {
+    console.log('Manufacturer: ' + req.userId);
     try {
         const role = await getRole("ca.Manufacturer.example.com", req.userId);
+        console.log("Role: " + role);
         if (role !== 'manufacturer') {
             throw Error("this route is not for you, only for manufacturer");
         }

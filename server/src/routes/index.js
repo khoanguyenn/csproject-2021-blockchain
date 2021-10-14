@@ -8,6 +8,9 @@ const ManufacturerController=require("../controllers/manufacturer");
 const initApp = (app) => {
     app.use("/auth",  AuthController)
     app.use("/manufacturer", ManufacturerController);
+    app.get('/manufacturer', (req, res) => {
+        res.send("Hello manufacturer!");
+    })
     app.use("/distributor", DistributorController)
     app.use("/medical-unit", MedicalUnitController)
 

@@ -1,4 +1,4 @@
-const login = (req, res) => {
+const loginPage = (req, res) => {
     res.render('login', {
         isLoginPage: true
     })
@@ -16,7 +16,7 @@ const getInfo = (req, res) => {
 }
 
 module.exports = {
-    login,
+    loginPage,
     getInfo,
     userPage
 }
