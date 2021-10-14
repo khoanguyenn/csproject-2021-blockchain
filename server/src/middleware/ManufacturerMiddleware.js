@@ -1,54 +1,65 @@
-const express = require("express")
-const router = express.Router()
 const {createContract, disconnetGateway}=require('../helpers/web_util')
 
 
 /**
  * @author Ha Xuan Huy
- * @returns all vaccine lots of manufacturer
+ * @param {Request} req
+ * @param {Response} res 
+ * @returns All vaccine lot of the manufacturer. For example,  
+ * {
+        "Key": "orgast",
+        "Record": {
+            "dateOfManufacturer": "12/10/2021",
+            "docType": "vaccineLot",
+            "owner": "manufacturer",
+            "vaccineLot": "orgast",
+            "vaccineManufacturer": "org1",
+            "vaccineName": "astra",
+            "vaccineQuantity": "3"
+        }
+    }
  */
- router.get("/vaccines", async function (req, res) {
-  
-  try {
-      const contract = await createContract();
+const getAllVaccineLot = async (req, res) => {
+    try {
+        const contract = await createContract();
 
-      console.log(`GET all vaccine lots from manufacturer`)
-      let data = await contract.evaluateTransaction('GetAllManufacturerLots') 
-      res.status(200).json(JSON.parse(data.toString()))
-      
-  } catch (err) {
-      console.error("error: " + err)
-      res.send(500)
-  } finally {
-    disconnetGateway();
-  }
-})
+        console.log(`GET all vaccine lots from manufacturer`)
+        let data = await contract.evaluateTransaction('GetAllManufacturerLots') 
+        res.status(200).json(JSON.parse(data.toString()))
+        
+    } catch (err) {
+        console.error("error: " + err)
+        res.send(500)
+    } finally {
+        disconnetGateway();
+    }
+}
 
 /**
  * @author Ha Xuan Huy
- * @returns a vaccine lot with given ID from manufacturer
+ * @returns A vaccine lot with given ID from manufacturer
  */
- router.get("/vaccines/:vaccineID", async function (req, res) {
-  let key=req.params.vaccineID
- try {
-     const contract = await createContract();
-     console.log(`GET a vaccine lot with id ${key} from Manufacturer`)
-     let data = await contract.evaluateTransaction('GetManufacturerLot', key) 
-     res.status(200).json(JSON.parse(data.toString()))
- } catch (err) {
-     console.error("error: " + err)
-     res.send(500)
- } finally {
-   disconnetGateway();
- }
-})
+ const getVaccineLot = async (req, res) => {
+    let key=req.params.vaccineID
+    try {
+        const contract = await createContract();
+        console.log(`GET a vaccine lot with id ${key} from Manufacturer`)
+        let data = await contract.evaluateTransaction('GetManufacturerLot', key) 
+        res.status(200).json(JSON.parse(data.toString()))
+    } catch (err) {
+        console.error("error: " + err)
+        res.send(500)
+    } finally {
+    disconnetGateway();
+    }
+}
 
 //POST /manufacturer/vaccines with body request {"manufacturer":"value","name":"value","quantity":"value","dateOfManufacture":"value"}
 /**
  * @author Ha Xuan Huy
  * @returns create a new vaccine lot
  */
-router.post('/vaccines', async function (req, res){
+const createVaccineLot = async (req, res) => {
     try {
       var key1 =String(req.body.manufacturer)
       var key2 =String(req.body.name)
@@ -63,14 +74,14 @@ router.post('/vaccines', async function (req, res){
     } finally {
         disconnetGateway();
     }
-})  
+}
 
 // PUT /manufacturer/delivery with body request {"vaccineLot":"value"}
 /**
  * @author Ha Xuan Huy
  * @returns  transfer vaccine lot from manufacturer to distributor
  */
- router.put("/delivery", async function (req, res) {
+const deliverToDistributor =  async (req, res) => {
   
   try {
       var key =String(req.body.vaccineLot)
@@ -85,14 +96,14 @@ router.post('/vaccines', async function (req, res){
   } finally {
     disconnetGateway();
   }
-})
+}
 
 
 /**
  * @author Ha Xuan Huy
  * @returns all manufacturer's delivery logs 
  */
- router.get("/logs", async function (req, res) {
+const getLogs = async (req, res) => {
   try {
       const contract = await createContract();
       console.log(`all manufacturer's delivery logs`)
@@ -105,14 +116,14 @@ router.post('/vaccines', async function (req, res){
   } finally {
     disconnetGateway();
   }
-})
+}
 
 // PUT /manufacturer/vaccines with body request {"vaccineLot":"value","name":"value","quantity":"value","dateOfManufacture":"value"}
 /**
  * @author Ha Xuan Huy
  * @returns update a vaccine lot in Manufacturer with specific ID
  */
- router.put("/vaccines", async function (req, res) {
+const updateVaccineLot = async (req, res) => {
   
   try {
       var key1 =String(req.body.vaccineLot)
@@ -130,14 +141,14 @@ router.post('/vaccines', async function (req, res){
   } finally {
     disconnetGateway();
   }
-})
+}
 
 //DELETE /manufacturer/vaccines with body request {"vaccineLot":"value"}
 /**
  * @author Ha Xuan Huy
  * @returns delete a vaccine lot with specific ID in Manufacturer
  */
- router.delete("/vaccines", async function (req, res) {
+const deleteVaccineLot =  async (req, res) => {
   
   try {
       var key =String(req.body.vaccineLot)
@@ -152,7 +163,15 @@ router.post('/vaccines', async function (req, res){
   } finally {
     disconnetGateway();
   }
-})
+}
 
 
-module.exports = router
+module.exports = {
+    getAllVaccineLot,
+    getVaccineLot,
+    createVaccineLot,
+    deliverToDistributor,
+    getLogs,
+    updateVaccineLot,
+    deleteVaccineLot,
+}

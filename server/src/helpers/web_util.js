@@ -1,7 +1,7 @@
 
 const { Wallets, Gateway } = require('fabric-network');
 const path = require('path');
-//const { buildCCPOrg1, buildWallet } = require('../../../../server/utils/javascript/AppUtil.js.js');
+const { buildCCPOrg1, buildWallet } = require('./AppUtil');
 
 const walletPath = path.join(__dirname, '../../wallet');
 const channelName = 'mychannel';

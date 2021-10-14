@@ -10,6 +10,10 @@ const userPage = (req, res) => {
     })
 }
 
+const manufacturerPage = (req, res) => {
+    res.render('manufacturer');
+}
+
 const getInfo = (req, res) => {
     const body = req.body;
     console.log(body);
@@ -18,5 +22,6 @@ const getInfo = (req, res) => {
 module.exports = {
     loginPage,
     getInfo,
-    userPage
+    userPage,
+    manufacturerPage,
 }

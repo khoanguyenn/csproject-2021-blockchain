@@ -1,0 +1,69 @@
+<input a href="#" data-toggle="modal" data-target="#exampleModal" type="button" class="btn btn-primary" id="addRow" value="Add New Row" />
+<table class="table table-bordered" id="myTable">
+    <thead>
+        <tr>
+            <th scope="col">VaccineLot</th>
+            <th scope="col">VaccineManufacterer</th>
+            <th scope="col">VaccineName</th>
+            <th scope="col">VaccineQuantity</th>
+            <th scope="col">DateOfManufacture</th>
+            <th scope="col">Owner</th>
+            </tr>
+    </thead>
+    <tbody>
+        <p>
+        </p>
+        <!-- <tr>
+        <td>3</td>
+        <td colspan="2">Larry the Bird</td>
+        <td>@twitter</td>
+        </tr> -->
+    </tbody>
+</table>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create new vaccine</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+            <div class="row">
+                <div class="form-group col">
+                    <label for="manufacturer" class="col-form-label">Manufacturer:</label>
+                    <input class="form-control" id="manufacturer"></input>
+                </div>
+                <div class="form-group col">
+                    <label for="vaccine-name" class="col-form-label">Vaccine name:</label>
+                    <input class="form-control" id="vaccine-name"></input>
+                </div>
+            </div>
+
+
+             <div class="form-group">
+              <label for="vaccine-quantity" class="col-form-label">Vaccine quantity:</label>
+              <input class="form-control" id="vaccine-quantity"></input>
+             </div>
+            <div class="form-group">
+                <label for="vaccine-date" class="col-form-label">Date of Manufacture:</label>
+                <input class="form-control" id="vaccine-date"></input>
+            </div>
+            <div class="form-group">
+                <label for="vaccine-owner" class="col-form-label">Vaccine owner:</label>
+                <input class="form-control" id="vaccine-owner"></input>
+            </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary"><i class="fas fa-check"></i><span class="ml-1">Confirm</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+

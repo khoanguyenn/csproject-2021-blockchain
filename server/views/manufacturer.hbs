@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{#if isLoginPage}}
+        <link rel="stylesheet" href="/css/login.css">
+    {{/if}}
+    {{#if isUserPage}}
+        <link rel="stylesheet" href="/css/user.css">
+    {{/if}}
+    <link rel="stylesheet" href="/css/drawer.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+            integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+            crossorigin="anonymous"></script>
+
+    <title>Login Form</title>
+</head>
+<body>
+<div class="container-fluid display-table fullheight">
+    <div class="row display-table-row fullheight">
+        <div class="col-md-2 col-sm-1 hidden-xs display-table-cell v-align box" id="navigation">
+                <div class="logo">
+                <i class="fa-solid fa-shield-virus"></i><span> Vaccine System</span>
+            </div>
+            <div class="navi">
+                <ul class="navi__menu">
+                    <li class="active"><a href="#"><i class="fas fa-home" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Home</span></a></li>
+                    <li><a href="#" data-toggle="modal" data-target="#add_project"><i class="fa fa-tasks" aria-hidden="true" data-target="#add_project"></i><span class="hidden-xs hidden-sm">Delivery Logs</span></a></li>
+                    <li><a href="#"><i class="fa fa-bar-chart" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Vaccinate Status</span></a></li>
+                </ul>
+                <li class="navi__logout"><a href="#"><i class="fa-solid fa-right-from-bracket"></i><span class="hidden-xs hidden-sm">Log Out</span></a></li>
+            </div>
+        </div>
+        <div class="col-md-10 col-sm-11 pt-5 px-3">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <div class="input-group-text"><i class="fas fa-search"></i></div>
+                        <input type="text" class="form-control" id="search-bar" placeholder="Search...">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <button a href="#" data-toggle="modal" data-target="#exampleModal" type="button" class="btn btn-primary" id="addVaccine" ><i class="fas fa-plus"></i><span class="ml-1">Add vaccine</span></button>
+                </div>
+            </div>
+        <table class="table table-bordered" id="myTable">
+            <tbody>
+                <tr>
+                    <th scope="col">Manufacture date</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Owner</th>
+                    <th scope="col">Lot number</th>
+                    <th scope="col">Manufacturer</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Quantity</th>
+                    
+                    
+                </tr>
+                </tbody>
+        </table>
+
+
+        </div>
+    </div>
+</div>
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Create new vaccine</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="row">
+                        <div class="form-group col">
+                            <label for="manufacturer" class="col-form-label">Manufacturer:</label>
+                            <input class="form-control" id="manufacturer"></input>
+                        </div>
+                        <div class="form-group col">
+                            <label for="vaccine-name" class="col-form-label">Vaccine name:</label>
+                            <input class="form-control" id="vaccine-name"></input>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                    <label for="vaccine-quantity" class="col-form-label">Vaccine quantity:</label>
+                    <input class="form-control" id="vaccine-quantity" type="number"></input>
+                    </div>
+                    <div class="form-group">
+                        <label for="vaccine-date" class="col-form-label">Date of Manufacture:</label>
+                        <input class="form-control" id="vaccine-date" type="date"></input>
+                    </div>
+                    <div class="form-group">
+                        <label for="vaccine-owner" class="col-form-label">Vaccine owner:</label>
+                        <input class="form-control" id="vaccine-owner"></input>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="confirm-button"><i class="fas fa-check"></i><span class="ml-1">Confirm</span></button>
+            </div>
+            </div>
+        </div>
+        </div>
+</body>
+<script>
+    fetchAllVaccineLots()
+    $('#addVaccine').on('click', () => {
+        console.log("helloworld")
+    })
+    $('#confirm-button').on('click', () => {
+        const manufacturer = $('#manufacturer').val()
+        const vaccineName = $('#vaccine-name').val();
+        const vaccineQuantity = $('#vaccine-quantity').val();
+        const vaccineDate = $('#vaccine-date').val();
+
+        const newVaccineLot = { 
+            "manufacturer": manufacturer, 
+            "name": vaccineName, 
+            "quantity": vaccineQuantity,
+            "dateOfManufacture": vaccineDate, 
+        } 
+        
+        //Close modal
+        $('#exampleModal').modal('hide');
+        $('body').removeClass('modal-open');
+        $('.modal-backdrop').remove();
+
+    })
+    $('#search-bar').on('input', () => {
+        const vaccineTable = $('myTable');
+        const keyword = $('#search-bar').val();
+        const rows = $('#myTable tbody').children(':not(tr:first-child)');
+        rows.show();
+        for (row of rows) {
+            const rowContent = row.innerHTML;
+            if(!rowContent.includes(keyword)) {
+                $(row).hide();
+            }
+        }        
+    })
+    function fetchAllVaccineLots() {
+        $.ajax('http://localhost:3000/manufacturer/vaccines')
+            .done(function(data) {
+                return vaccineLotList = data.map(row => row.Record);
+            })
+            .then(data => {
+                var vaccinelotList = [];
+                const vaccineTable = document.getElementById('myTable');
+
+                data.forEach(item => {
+                    vaccinelotList.push(item.Record)
+                })
+                
+                for (let vaccineLot of vaccinelotList) {
+                    var row = vaccineTable.insertRow(-1);
+                    for (let vaccineCell in vaccineLot) {
+                        row.insertCell(-1).innerHTML = vaccineLot[vaccineCell]
+                    }
+                }
+            })
+    }
+
+
+</script>
+</html>
