@@ -73,6 +73,10 @@ const login = async (req, res, next) => {
     }
 
 }
+const logout = async (req, res, next) => {
+    res.clearCookie('userId');
+    res.redirect('/auth/login')
+}
 
 const verifyToken = async (req, res, next) => {
     try {
@@ -159,6 +163,7 @@ const getRole = async (CAHostName, userId) => {
 module.exports = {
     signup,
     login,
+    logout,
     verifyToken,
     isManufacturer,
     isDistributor, 

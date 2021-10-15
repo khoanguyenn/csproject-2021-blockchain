@@ -21,6 +21,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
             integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
             crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <title>Login Form</title>
 </head>
@@ -37,7 +38,7 @@
                     <li><a href="#" data-toggle="modal" data-target="#add_project"><i class="fa fa-tasks" aria-hidden="true" data-target="#add_project"></i><span class="hidden-xs hidden-sm">Delivery Logs</span></a></li>
                     <li><a href="#"><i class="fa fa-bar-chart" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Vaccinate Status</span></a></li>
                 </ul>
-                <li class="navi__logout"><a href="#"><i class="fa-solid fa-right-from-bracket"></i><span class="hidden-xs hidden-sm">Log Out</span></a></li>
+                <li class="navi__logout"><a href="/auth/logout"><i class="fa-solid fa-right-from-bracket"></i><span class="hidden-xs hidden-sm">Log Out</span></a></li>
             </div>
         </div>
         <div class="col-md-10 col-sm-11 pt-5 px-3">
@@ -49,7 +50,10 @@
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <button a href="#" data-toggle="modal" data-target="#exampleModal" type="button" class="btn btn-primary" id="addVaccine" ><i class="fas fa-plus"></i><span class="ml-1">Add vaccine</span></button>
+                    <button a href="#" data-toggle="modal" data-target="#exampleModal" type="button" class="btn btn-primary" id="addVaccine" >
+                        <i class="fas fa-plus"></i>
+                        <span class="ml-1">Add vaccine</span>
+                    </button>
                 </div>
             </div>
         <table class="table table-bordered" id="myTable">
@@ -72,49 +76,54 @@
         </div>
     </div>
 </div>
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Create new vaccine</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form>
-                    <div class="row">
-                        <div class="form-group col">
-                            <label for="manufacturer" class="col-form-label">Manufacturer:</label>
-                            <input class="form-control" id="manufacturer"></input>
-                        </div>
-                        <div class="form-group col">
-                            <label for="vaccine-name" class="col-form-label">Vaccine name:</label>
-                            <input class="form-control" id="vaccine-name"></input>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                    <label for="vaccine-quantity" class="col-form-label">Vaccine quantity:</label>
-                    <input class="form-control" id="vaccine-quantity" type="number"></input>
-                    </div>
-                    <div class="form-group">
-                        <label for="vaccine-date" class="col-form-label">Date of Manufacture:</label>
-                        <input class="form-control" id="vaccine-date" type="date"></input>
-                    </div>
-                    <div class="form-group">
-                        <label for="vaccine-owner" class="col-form-label">Vaccine owner:</label>
-                        <input class="form-control" id="vaccine-owner"></input>
-                    </div>
 
-                </form>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Create new vaccine</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="row">
+                <div class="form-group col">
+                    <label for="manufacturer" class="col-form-label">Manufacturer:</label>
+                    <input class="form-control" id="manufacturer"></input>
+                </div>
+                <div class="form-group col">
+                    <label for="vaccine-name" class="col-form-label">Vaccine name:</label>
+                    <input class="form-control" id="vaccine-name"></input>
+                </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="confirm-button"><i class="fas fa-check"></i><span class="ml-1">Confirm</span></button>
+            <div class="form-group">
+            <label for="vaccine-quantity" class="col-form-label">Vaccine quantity:</label>
+            <input class="form-control" id="vaccine-quantity" type="number"></input>
             </div>
+            <div class="form-group">
+                <label for="vaccine-date" class="col-form-label">Date of Manufacture:</label>
+                <input class="form-control" id="vaccine-date" type="date"></input>
             </div>
-        </div>
-        </div>
+            <div class="form-group">
+                <label for="vaccine-owner" class="col-form-label">Vaccine owner:</label>
+                <input class="form-control" id="vaccine-owner"></input>
+            </div>
+
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="confirm-button" data-dismiss="modal">
+            <i class="fas fa-check"></i>
+            <span class="ml-1">Confirm</span>
+        </button>
+    </div>
+    </div>
+</div>
+</div>
+
 </body>
 <script>
     fetchAllVaccineLots()
@@ -133,15 +142,35 @@
             "quantity": vaccineQuantity,
             "dateOfManufacture": vaccineDate, 
         } 
-        
+
+        $.ajax({
+            type: 'POST',
+            url: 'http://localhost:3000/manufacturer/vaccines',
+            contentType: 'application/json',
+            data: JSON.stringify(newVaccineLot),
+        }).done(function (msg) {
+            Swal.fire({
+                icon: 'success',
+                title: 'All done!',
+                text: 'You clicked the button!',
+            })
+        }).fail(function (msg) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong!',
+                })
+        }).always(function () {
+            
+        });
+
         //Close modal
-        $('#exampleModal').modal('hide');
-        $('body').removeClass('modal-open');
-        $('.modal-backdrop').remove();
+        //$('#exampleModal').modal('hide');
+        //$('body').removeClass('modal-open');
+        //$('.modal-backdrop').remove();
 
     })
     $('#search-bar').on('input', () => {
-        const vaccineTable = $('myTable');
         const keyword = $('#search-bar').val();
         const rows = $('#myTable tbody').children(':not(tr:first-child)');
         rows.show();
@@ -152,7 +181,13 @@
             }
         }        
     })
+    $('#exampleModal').on('hide.bs.modal', () => {
+
+    })
+
     function fetchAllVaccineLots() {
+        const vaccineTable = $('#myTable tbody').children(':not(tr:first-child)');
+        vaccineTable.remove();
         $.ajax('http://localhost:3000/manufacturer/vaccines')
             .done(function(data) {
                 return vaccineLotList = data.map(row => row.Record);

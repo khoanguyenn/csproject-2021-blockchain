@@ -5,6 +5,7 @@ const AuthMiddleware = require('../middleware/AuthMiddleware');
 const RenderMiddleware = require('../middleware/RenderMiddleware');
 
 router.post('/signup', AuthMiddleware.signup);
+router.get('/logout', AuthMiddleware.logout);
 
 // This is the example of checking manufacturer role
 router.post("/test", AuthMiddleware.verifyToken, AuthMiddleware.isManufacturer, (req, res) => {

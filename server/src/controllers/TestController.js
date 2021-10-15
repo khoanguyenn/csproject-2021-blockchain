@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const {createContract, disconnetGateway}=require('../helpers/web_util')
-const TestMiddleware = require('../middleware/TestMiddleware');
+const RenderMiddleware = require('../middleware/RenderMiddleware');
 
-router.get('/login', TestMiddleware.login);
-router.post('/login', TestMiddleware.getInfo)
-router.get('/user', TestMiddleware.userPage)
+router.get('/login', RenderMiddleware.loginPage);
+router.post('/login', RenderMiddleware.getInfo)
+router.get('/user', RenderMiddleware.userPage)
 
 
 
