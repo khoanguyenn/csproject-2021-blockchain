@@ -181,7 +181,7 @@ return await this.GetQueryResultForQueryString(ctx, JSON.stringify(queryString))
 async InitVaccineLot(ctx) {
 const vaccineLots = [
 {
-  vaccineLot:'concac' ,
+  vaccineLot:'coac' ,
   vaccineManufacturer: 'org1',
  vaccineName: 'astra',
  vaccineQuantity:'3',
@@ -189,7 +189,7 @@ const vaccineLots = [
 },
                
 {
-  vaccineLot:'cailoz' ,
+  vaccineLot:'caoz' ,
   vaccineManufacturer: 'org2',
  vaccineName: 'mordena',
  vaccineQuantity:'5',
