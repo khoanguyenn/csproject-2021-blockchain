@@ -14,10 +14,10 @@ During this second sprint, the following goals must be achieved
 | ----- | -------- | ----------- |
 | Architecture blockchain v2.0 | Dang Khoa, Minh Huy | Update the current v1.0 architecture, adding more peers, orgs |
 | Web-server interface | Minh Khoi, Dang Khoa | Apply a simple user interface by template engine |
-| Chaincode update | Quoc Thai, Xuan Huy | Overall review after testing, more chaincode functionality |
-| APIs endpoint | Xuan Huy, Minh Huy | Testing done endpoint, adding more endpoint |
+| Chaincode update | Quoc Thai, Xuan Huy, Minh Huy | Overall review after testing, more chaincode functionality |
+| APIs endpoint | Quoc Thai, Xuan Huy, Minh Huy | Testing done endpoint, adding more endpoint |
 | User authentication feature | Nhut Anh, Quoc Thai | Authentication route for user |
-| Database schema change | Quoc Thai, Dang Khoa | Change the current database schema |
+| Database schema change | Nhut Anh, Dang Khoa | Change the current database schema |
 
 # Tasks details 
 
