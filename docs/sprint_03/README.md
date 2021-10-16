@@ -1,4 +1,4 @@
-# Tasks
+# Tasks: Final product
 
 This is the tasklist for the third sprint (also the final sprint), specify the tasks and the assignee of the task.
 This week mainly focus on testing the current feature, building UI for users.
@@ -50,4 +50,4 @@ During the third sprint, the followings goals must be achieved:
 
 ### 🕸️ Network maintenance
 * All of the team member must have a runnable version of project in their environment.
-* 
+* No more changes to the current blockchain network.
