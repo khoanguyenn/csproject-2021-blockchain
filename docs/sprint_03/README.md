@@ -17,6 +17,7 @@ During the third sprint, the followings goals must be achieved:
 | Testing API endpoints | Minh Huy | Validation testing, and response checking |
 | Web-server interface completion | Minh Khoi, Dang Khoa | Building the complete set of UI for end users |
 | Network maintenance | Dang Khoa | Testing done endpoint, adding more endpoint |
+| Final product presentation | Lion's team | A product pitching style |
 
 # Tasks details 
 
@@ -45,9 +46,18 @@ During the third sprint, the followings goals must be achieved:
 * MedicalUnit interface:
   * Show a list of available vaccine in the store, vaccine id, type and current owner state
   * List of given vaccine, and vaccine's owners
- 
+
+* __Deadline:__ Monday, 11/10/2021
 **Figma:** [Link to UI design](https://www.figma.com/file/PVXHyekYD6Oxn2XmmPJXgU/Blockchain-network)
 
 ### 🕸️ Network maintenance
 * All of the team member must have a runnable version of project in their environment.
 * No more changes to the current blockchain network.
+* __Deadline:__ No, long term tasks
+
+### 🎓 Final product presentation
+* Final project presentation about the product on Friday, 22/10/2021
+* Present what you have done over the 3 weeks, no focus on technical, only final product.
+* Blockchain application on team's choosen scenerio, how HF solve the problems.
+* An example who would use the product, users and roles interact with the network.
+* __Duration:__ 25' min < 45' max
