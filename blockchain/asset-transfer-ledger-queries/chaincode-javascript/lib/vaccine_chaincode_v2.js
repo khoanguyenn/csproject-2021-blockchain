@@ -294,7 +294,7 @@ const vaccines = [
   vaccineName: 'astra',
   vaccineManufacturer: 'distributor',
   dateOfManufacture: '10/10/2021'
-}
+},
 {
   vaccineID: 'Khoa014',
   vaccineName: 'moderna',
