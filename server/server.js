@@ -9,7 +9,7 @@ config.applyParserConfig(app);
 config.applyTemplateEngine(app);
 
 //Routes apply
-initLedger(app);
+//initLedger(app);
 initApp(app);
 
 

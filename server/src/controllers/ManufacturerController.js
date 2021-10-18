@@ -11,6 +11,7 @@ const AuthMiddleware = require('../middleware/AuthMiddleware');
 
 // AuthMiddleware.verifyToken, AuthMiddleware.isManufacturer,
 router.get('/',AuthMiddleware.verifyToken, AuthMiddleware.isManufacturer,RenderMiddleware.manufacturerPage);
+router.get('/delivery', RenderMiddleware.manufacturerDeliveryPage);
 
 //Get all vaccine lots of manufacturer
  router.get("/vaccines", ManufacturerMiddleware.getAllVaccineLot)

@@ -64,7 +64,11 @@ const login = async (req, res, next) => {
         }
 
         req.userId = userId;
-        res.cookie("userId", userId, {maxAge: 60 * 60 * 24});
+        const expireDate = getExpireDate(60);
+        console.log(expireDate);
+        res.cookie("userId", userId, {
+            expireDate,
+        });
         next();
     }
     catch(err){
@@ -158,6 +162,17 @@ const getRole = async (CAHostName, userId) => {
     //Attach the role for later check
     const role = mspId.substring(0, mspId.length - 3).toLowerCase();
     return role;
+}
+
+/**
+ * This utility function to calculate exxpire date of cookie
+ */
+const getExpireDate = (minute) => {
+    const now = new Date();
+    const time = now.getTime();
+    const expireDate = time + 1000 * 60 * minute;
+    now.setTime(expireDate);
+    return now.toUTCString();
 }
 
 module.exports = {

@@ -14,6 +14,10 @@ const manufacturerPage = (req, res) => {
     res.render('manufacturer');
 }
 
+const manufacturerDeliveryPage = (req, res) => {
+    res.render('manufacturerDelivery')
+}
+
 const getInfo = (req, res) => {
     const body = req.body;
     console.log(body);
@@ -24,4 +28,5 @@ module.exports = {
     getInfo,
     userPage,
     manufacturerPage,
+    manufacturerDeliveryPage,
 }
