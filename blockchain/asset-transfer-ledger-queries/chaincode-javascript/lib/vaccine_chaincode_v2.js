@@ -609,6 +609,55 @@ async VaccineExists(ctx, vaccineID) {
   return  assetState && (assetState.length > 0);
 }
 
+/**
+ * @author Pham Minh Huy
+ * @param {*} ctx
+ * @param {String} owner 
+ * @return vaccine lots of an owner 
+ */
+  async GetAllLotsOf(ctx,owner){
+    let queryString = {};
+    queryString.selector = {};
+    queryString.selector.docType = 'vaccineLot';
+    queryString.selector.owner = owner;
+    return await this.GetQueryResultForQueryString(ctx, JSON.stringify(queryString));
+  }
+
+
+/**
+ * @author Pham Minh Huy
+ * @param {*} ctx
+ * @param {String} lotNo
+ * @param {String} owner 
+ * @return transactions of a specific vaccine lot 
+ */
+  
+  async GetDeliveryLogsOf(ctx,lotNo,owner){
+    let iterator = await ctx.stub.getHistoryForKey(lotNo);
+    let result = [];
+    let res = await iterator.next();
+    while (!res.done) {
+      if (res.value) {
+        console.info(`found state update with value: ${res.value.value.toString('utf8')}`);
+        const obj = JSON.parse(res.value.value.toString('utf8'));
+        obj.timestamp=toDate(res.value.timestamp)
+        result.push(obj);
+      }
+      res = await iterator.next();
+    }
+    await iterator.close();
+    return result;  
+    function toDate(timestamp) {
+      const milliseconds = (timestamp.seconds.low + (timestamp.nanos / 1000000000)) * 1000;
+      return new Date(milliseconds).toString();
+    }
+
+    
+  }
+
+
+
+
 }
   
   module.exports = Chaincode;

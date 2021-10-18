@@ -1,3 +1,4 @@
+const { json } = require('express');
 const express = require('express');
 const router = express.Router();
 const {createContract, disconnetGateway}=require('../helpers/web_util')
@@ -8,46 +9,53 @@ router.post('/login', RenderMiddleware.getInfo)
 router.get('/user', RenderMiddleware.userPage)
 
 
+function JSONlencount(json) {
+    var count=0;
+    for(var prop in json) {
+       if (json.hasOwnProperty(prop)) {
+          ++count;
+       }
+    }
+    return count;
+ }
+function testSpecChar(str){     var format = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+    return format.test(str)}
 
-
-
-
-router.post('/parcip/init',async (req, res)=>{
-    const contract = await createContract();
-
-    let data = await contract.submitTransaction('TestInit') 
-    res.send("done")
+function JSONvalidator(json){
+    var bool=true
+    const keys = Object.keys(json);
+    for (let i = 0; i < keys.length; i++) {
+        bool=testSpecChar(json[i]);
+        if (bool == false) break
+    }
+    return bool
+}
+router.post('/parcip/testing',async (req, res)=>{
+    var givenlength=JSONlencount(req.body)
+    if (givenlength != 2){
+        res.send("wrong amount of data given")        //wrong format
+    }
+    else {//right number of field, check field content maybe ? depending 
+       if (JSONvalidator(req.body)){
+           res.send("nothing unexpected happened, transaction submitted")
+       }
+       else {
+           res.send("malixious")
+       }
+    }
 })
-router.get('/parcip/getAllManu',async (req, res)=>{
-    const contract = await createContract();
-    let data = await contract.evaluateTransaction('GetAllManufacturerLots') 
-    res.send(data)
+router.post('/parcip/test2',async (req, res)=>{
+    var var1 = String(req.body.var1)
+    var var2 = String(req.body.var2)
+    try {
+        const contract = await createContract();
+        let result = await contract.submitTransaction('GetDeliveryLogsOf', var1, var2);
+        res.send(result);
+    } catch (error) {
+        console.log('error: ' + error);
+        res.send(404);
+    } finally {
+        disconnetGateway();
+    }
 })
-//GROUP 1 ERROR, data NOT CHANGED 
-router.post('/parcip/manu2dist',async (req,res)=>{
-    var data1 = String(req.body.lotID)
-    const contract = await createContract();
-    let data = await contract.evaluateTransaction('DeliverToDistributor',data1) 
-    console.log("confirmed vaccine lot "+ data1 +" is now under DISTRIBUTOR jurisdiction")
-   
-    res.send("work done, this implies theh vaccine lot "+data1+" has been moved to DISTRIBUTOR")
-    const contract2 = await createContract();
-    let data2 = await contract2.evaluateTransaction('GetManufacturerLogs')
-    console.log(JSON.parse(data2.toString()))
-
-})
-router.post('/parcip/divideVacc',async (req, res)=>{
-    var data1 = String(req.body.lotID)
-    const contract = await createContract();
-    let data = await contract.evaluateTransaction('DivideVaccineLot',data1) 
-    res.send(data)
-})
-//end group 1 Error
-router.post('/parcip/deliverMedUnit',async (req, res)=>{
-    var data1 = String(req.body.lotID)
-    const contract = await createContract();
-    let data = await contract.evaluateTransaction('DeliverToMedicalUnit',data1) // err wtf ?
-    res.send(data)
-})
-
 module.exports = router;
