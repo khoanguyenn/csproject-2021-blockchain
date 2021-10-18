@@ -47,8 +47,6 @@ MedicalUnit functions
 * ```IsFullyVaccinated(ctx, userID)``` - return true/false if the user is fully vaccinated
 * ```DivideVaccineLot(ctx, lotNo)``` - create number of vaccine doses by vaccine's quantity in the lot, should look up all lot, then divide lot and commit to ledger
 * ```VaccinateCitizen(ctx, userID, vaccineID)``` - vaccinate a user's ID (update the owner field)
-* ```GetAllVaccines(ctx)``` - get all of available vaccines
-* ```GetAllUsers(ctx)``` - get all of the users
 
 Ultility functions
 * ```GetAllLotsOf(ctx, owner)``` - get all available vaccine lot of a owner
