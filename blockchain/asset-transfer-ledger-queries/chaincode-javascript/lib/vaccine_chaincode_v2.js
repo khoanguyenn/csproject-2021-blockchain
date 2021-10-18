@@ -280,14 +280,26 @@ const vaccines = [
 {
  vaccineID: 'Thai12',
  vaccineName: 'astra',
- vaccineManufacturer: 'org1',
- dateOfManufacturer:'69/69/69'
+ vaccineManufacturer: 'distributor',
+ dateOfManufacturer:'10/18/2021'
 },
 {
  vaccineID: 'Huy012',
  vaccineName: 'mordena',
- vaccineManufacturer: 'org1',
- dateOfManufacturer:'69/69/69'
+ vaccineManufacturer: 'distributor',
+ dateOfManufacturer:'10/9/2021'
+},
+{
+  vaccineID: 'Khoa012',
+  vaccineName: 'astra',
+  vaccineManufacturer: 'distributor',
+  dateOfManufacture: '10/10/2021'
+}
+{
+  vaccineID: 'Khoa014',
+  vaccineName: 'moderna',
+  vaccineManufacturer: 'distributor',
+  dateOfManufacture: '10/09/2021'
 }
 ];
 
