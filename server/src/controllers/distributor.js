@@ -52,7 +52,6 @@ const {createContract, disconnetGateway}=require('../helpers/web_util')
   try {
       var key =String(req.body.vaccineLot)
       const contract = await createContract();
-
       console.log(`Deliver vaccine lot with id ${key} to medical unit `)
       await contract.submitTransaction('DeliverToMedicalUnit', key) 
       res.sendStatus(200)
@@ -67,14 +66,16 @@ const {createContract, disconnetGateway}=require('../helpers/web_util')
 
 /**
  * @author Ha Xuan Huy
+ * @coauthor Pham Minh Huy @return all vaccine lot that HAS BEEN, at some interval of time, under DISTRIBUTOR
  * @returns all distributor's delivery logs 
  */
  router.get("/logs", async function (req, res) {
   try {
+      let dummyVal="dummy"
       const contract = await createContract();
 
       console.log(`GET all distributor's delivery logs`)
-      let data = await contract.evaluateTransaction('GetDistributorLogs') 
+      let data = await contract.evaluateTransaction('GetDeliveryLogsOf',dummyVal,"distributor") 
       res.status(200).json(JSON.parse(data.toString()))
       
   } catch (err) {
@@ -84,6 +85,27 @@ const {createContract, disconnetGateway}=require('../helpers/web_util')
     disconnetGateway();
   }
 })
+
+
+
+router.post('/parcip/test2',async (req, res)=>{
+  var var1 = String(req.body.var1)
+  var var2 = String(req.body.var2)
+  try {
+      const contract = await createContract();
+      let result = await contract.submitTransaction('GetDeliveryLogsOf', var1, var2);
+      res.send("results is "+result);
+  } catch (error) {
+      console.log('error: ' + error);
+      res.send(404);
+  } finally {
+      disconnetGateway();
+  }
+})
+
+
+
+
 
 
 // PUT /distributor/vaccines with body request {"vaccineLot":"value","name":"value","quantity":"value","dateOfManufacture":"value"}

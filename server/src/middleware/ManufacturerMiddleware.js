@@ -101,14 +101,16 @@ const deliverToDistributor =  async (req, res) => {
 
 /**
  * @author Ha Xuan Huy
- * @returns all manufacturer's delivery logs 
+ * @coauthor Pham Minh Huy @return all vaccine lot that HAS BEEN, at some interval of time, under MANUUFACTURER
+ * @returns all VaccineLot that was under manufacturer
  */
 const getLogs = async (req, res) => {
   try {
-      const contract = await createContract();
-      console.log(`all manufacturer's delivery logs`)
-      let data = await contract.evaluateTransaction('GetManufacturerLogs') 
-      res.status(200).json(JSON.parse(data.toString()))
+    let dummyVal="dummy"
+    const contract = await createContract();
+    console.log(`GET manufacturer's delivery logs`)
+    let data = await contract.evaluateTransaction('GetDeliveryLogsOf',dummyVal,"manufacturer") 
+    res.status(200).json(JSON.parse(data.toString()))
       
   } catch (err) {
       console.error("error: " + err)
