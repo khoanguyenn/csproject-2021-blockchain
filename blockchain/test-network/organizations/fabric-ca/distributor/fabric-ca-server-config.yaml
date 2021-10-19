@@ -247,6 +247,8 @@ affiliations:
       - department2
    distributor:
       - department1
+   medicalunit:
+      - department1
 
 #############################################################################
 #  Signing section

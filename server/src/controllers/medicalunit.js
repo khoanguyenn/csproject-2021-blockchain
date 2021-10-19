@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 const {createContract, disconnetGateway} = require ('../helpers/web_util')
+const RenderMiddleware = require('../middleware/RenderMiddleware');
+
+
+router.get('/', RenderMiddleware.medicalUnitPage)
 
 /**
  * @author Ngo Quoc Thai
@@ -59,6 +63,8 @@ router.get('/vaccinate', async function (req, res) {
         disconnetGateway();
     }
 })
+
+
 
 module.exports = router;
 

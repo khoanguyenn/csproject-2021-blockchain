@@ -46,7 +46,7 @@ echo "$(yaml_ccp $ORG $P0PORT $CAPORT $PEERPEM $CAPEM)" > organizations/peerOrga
 
 ORG=Medicalunit
 P0PORT=11051
-CAPORT=9054
+CAPORT=10054
 PEERPEM=organizations/peerOrganizations/medicalunit.example.com/tlsca/tlsca.medicalunit.example.com-cert.pem
 CAPEM=organizations/peerOrganizations/medicalunit.example.com/ca/ca.medicalunit.example.com-cert.pem
 

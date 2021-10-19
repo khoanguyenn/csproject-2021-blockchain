@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{#if isLoginPage}}
+        <link rel="stylesheet" href="/css/login.css">
+    {{/if}}
+    {{#if isUserPage}}
+        <link rel="stylesheet" href="/css/user.css">
+    {{/if}}
+    <link rel="stylesheet" href="/css/manufacturer.css">
+    <link rel="stylesheet" href="/css/drawer.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+            integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+            crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@linways/table-to-excel@1.0.4/dist/tableToExcel.min.js"></script>
+    <title>Login Form</title>
+</head>
+<body>
+<div class="container-fluid display-table fullheight">
+    <div class="row display-table-row fullheight">
+        <div class="col-md-2 col-sm-1 hidden-xs display-table-cell v-align box" id="navigation">
+                <div class="logo">
+                <i class="fa-solid fa-shield-virus"></i><span> Vaccine System</span>
+            </div>
+            <div class="navi">
+                <ul class="navi__menu">
+                    <li><a href="/medical-unit"><i class="fas fa-home" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Home</span></a></li>
+                    <li class="active"><a href="/medical-unit/delivery"><i class="fa fa-tasks" aria-hidden="true" data-target="#add_project"></i><span class="hidden-xs hidden-sm">Delivery Logs</span></a></li>
+                    <li><a href="#"><i class="fa fa-bar-chart" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Vaccinate Status</span></a></li>
+                </ul>
+                <li class="navi__logout"><a href="/auth/logout"><i class="fa-solid fa-right-from-bracket"></i><span class="hidden-xs hidden-sm">Log Out</span></a></li>
+            </div>
+        </div>
+        <div class="col-md-10 col-sm-11 mt-5 px-4">
+            <div class="row mb-3 align-items-end">
+                <div class="col-md-auto">
+                    <div class="input-group">
+                        <div class="input-group-text"><i class="fas fa-search"></i></div>
+                        <input type="text" class="form-control" id="search-bar" placeholder="Search...">
+                    </div>
+                </div>
+                <div class="col-md-auto">
+                    <div class="form-group mb-0">
+                        <label for="from-date" class="col-form-label">From date:</label>
+                        <input class="form-control" id="from-date" type="date"></input>
+                    </div>
+                </div>
+                <div class="col-md-auto mr-auto">
+                    <div class="form-group mb-0">
+                        <label for="to-date" class="col-form-label">To date:</label>
+                        <input class="form-control" id="to-date" type="date"></input>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-expanded="false">
+                        Action
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <li><a class="dropdown-item" id="export-pdf" role="button"><i class="fas fa-file-pdf mr-2"></i>Export to PDF</a></li>
+                        <li><a class="dropdown-item" id="export-excel" role="button"><i class="fas fa-file-excel mr-2"></i>Export to Exel</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-auto">
+                    <button href="#" data-toggle="modal" data-target="#exampleModal" type="button" class="btn btn-primary" id="addVaccine" </button>
+                        <i class="fas fa-truck"></i>
+                        <span class="ml-1">Delivery</span>
+                    </button>
+                </div>
+            </div>
+            <table class="table table-bordered table-hover text-center" id="myTable">
+                <tbody>
+                    <tr>
+                        <th scope="col">Manufacture date</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Owner</th>
+                        <th scope="col">Lot number</th>
+                        <th scope="col">Manufacturer</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Quantity</th>
+                    </tr>
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">
+                Deliver to distributor
+            </h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form>
+                <div class="row align-items-end">
+                    <div class="form-group col-12 mb-0">
+                        <label for="vaccine-manufacturer" class="col-form-label">Lot number:</label>
+                        <select class="form-control" id="vaccine-lot">
+                        </select>
+                    </div>
+                    <div class="form-group col mb-0">
+                        <label for="vaccine-manufacturer" class="col-form-label">Manufacturer:</label>
+                        <select disabled class="form-control" id="vaccine-manufacturer">
+                            <option>manufacturer</option>
+                        </select>
+                    </div>
+                    <div class="col-auto justify-self-center">
+                        <i class="fas fa-arrow-right fa-lg mb-3"></i>
+                    </div>
+                    <div class="form-group col mb-0">
+                        <label for="vaccine-distributor" class="col-form-label">Distributor:</label>
+                        <select class="form-control" id="vaccine-distributor">
+                            <option>distributor</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" id="confirm-button" data-dismiss="modal">
+                <i class="fas fa-check"></i>
+                <span class="ml-1">Confirm</span>
+            </button>
+        </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script>
+    fetchVaccineLots()
+    $('#confirm-button').on('click', () => {
+        const vaccineLot = $('#vaccine-lot').val();
+        const vaccineDistributor = $('#vaccine-distributor').val();
+        const changeData = {
+            "vaccineLot": vaccineLot,
+            "toDistributor": vaccineDistributor,
+        }
+
+        console.log(changeData);
+    })
+    $('#search-bar').on('input', () => {
+        const keyword = $('#search-bar').val();
+        const rows = $('#myTable tbody').children(':not(tr:first-child)');
+        rows.show();
+        for (row of rows) {
+            const rowContent = row.innerHTML;
+            if(!rowContent.includes(keyword)) {
+                $(row).hide()
+            }
+        }        
+    })
+    $('[id="from-date"], [id="to-date"]').on('change', (event) => {
+        const fromDateVal = $('#from-date').val();
+        const toDateVal = $('#to-date').val()
+        const fromDate = new Date(fromDateVal).setHours(0);
+        const toDate = new Date(toDateVal).setHours(0);
+        const rows = $('#myTable tbody').children(':not(tr:first-child)');
+        rows.show();
+        rows.each(function (index) {
+            const currentRow = $(this).children(':first-child').text();
+            const extractDate = currentRow
+                .split('/')
+                .map(str => parseInt(str))
+                .reverse();
+            //Month start from 0-11
+            extractDate[1] -= 1;
+            const currentRowDate = new Date(...extractDate);
+            //For choosen from-date only
+            if (fromDateVal && !toDateVal && !(fromDate <= currentRowDate)) {
+                $(this).hide();
+            }
+            //For choosen to-date only
+            if (!fromDateVal && toDateVal && !(currentRowDate <= toDate)) {
+                $(this).hide();
+            }
+            //For choosen both from-date and to-date
+            if (fromDateVal && toDateVal && !(fromDate <= currentRowDate && currentRowDate <= toDate)) {
+                $(this).hide();
+            }
+        })
+    })
+    $('#export-pdf').on('click', () => {
+        const element = document.getElementById('myTable');
+        const option = {
+            margin: 5,
+            filename: "report_" + Intl.DateTimeFormat('en-US').format(new Date()).split("/").join("-") + ".pdf",
+        }
+
+        html2pdf().set(option).from(element).save();
+
+    })
+    $('#export-excel').on('click', () => {
+        const table = document.getElementById('myTable');
+        TableToExcel.convert(table, {
+        name: "report_" + Intl.DateTimeFormat('en-US').format(new Date()).split("/").join("-") + ".xlsx",
+        sheet: {
+            name: "sheet_01"
+        }
+        });
+    })
+    function fetchVaccineLots() {
+        const vaccineData = $('#myTable tbody').children(':not(tr:first-child)');
+        vaccineData.remove();
+        $.ajax('http://localhost:3000/manufacturer/vaccines')
+            .done(function(data) {
+                return vaccineLotList = data.map(row => row.Record);
+            })
+            .then(data => {
+                var vaccinelotList = [];
+                const vaccineTable = document.getElementById('myTable');
+
+                data.forEach(item => {
+                    vaccinelotList.push(item.Record)
+                })
+                
+                for (let vaccineLot of vaccinelotList) {
+                    var row = vaccineTable.insertRow(-1);
+                    for (let vaccineCell in vaccineLot) {
+                        row.insertCell(-1).innerHTML = vaccineLot[vaccineCell]
+                    }
+                }
+
+                vaccineLotList.map(vaccineLot => {
+                    const updateVaccineLot = vaccineLot["vaccineLot"];
+                    $('#vaccine-lot').append(`<option>${updateVaccineLot}</option`);
+                })
+
+            })
+    }
+
+
+</script>
+</html>

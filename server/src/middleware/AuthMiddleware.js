@@ -32,7 +32,7 @@ const signup = async (req, res) => {
 
         //Find the available identities
         const userIdentity = await wallet.get(userId);
-        if (!userIdentity) {
+        if (userIdentity) {
 			throw Error(`An identity for the user ${userId} already exists in the wallet`);
         }
 
@@ -48,6 +48,7 @@ const signup = async (req, res) => {
         res.status(400).send(err);
     }
 }
+
 
 const login = async (req, res, next) => {
     try{

@@ -666,7 +666,19 @@ async VaccineExists(ctx, vaccineID) {
 
     
   }
-
+  
+  /** 
+   * @author: Pham Minh Huy
+   * @param {*} ctx
+   * @param {String} owner
+   * @returns  list of all vaccines assigned to an owner
+  */
+  async GetAllVaccinesOf(ctx, owner){
+    let queryString = {};
+      queryString.selector = {};
+    queryString.selector.owner = owner;//might wanna add uppercase all
+    return await this.GetQueryResultForQueryString(ctx, JSON.stringify(queryString)); 
+  }
 
 
 

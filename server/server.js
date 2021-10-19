@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 
-const { initApp, initLedger } = require('./src/routes/index')
+const { initApp, initLedger, initAdminAccounts } = require('./src/routes/index')
 const config = require('./src/config')
 
 //Configuration
@@ -11,6 +11,7 @@ config.applyTemplateEngine(app);
 //Routes apply
 //initLedger(app);
 initApp(app);
+//initAdminAccounts(app);
 
 
 app.listen(3000, async () => {
