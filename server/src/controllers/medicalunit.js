@@ -7,8 +7,13 @@ const { serverRoot } = require("../helpers/pathUtil");
 const {createContract, disconnetGateway} = require ('../helpers/web_util')
 const RenderMiddleware = require('../middleware/RenderMiddleware');
 
-
-router.get('/', RenderMiddleware.medicalUnitPage)
+/**
+ * @author Nguyen Dang Khoa
+ * @description this is the rendering section of the medicalunit page
+ * @return all of the rendered page of medical unit page
+ */
+router.get('/', RenderMiddleware.medicalUnitPage);
+router.get('/delivery', RenderMiddleware.medicalUnitDeliveryPage)
 
 /**
  * @author Nguyen Dang Khoa
@@ -43,6 +48,22 @@ router.get('/vaccines', async function (req, res) {
     }
 })
 
+/**
+ * @author Nguyen Dang Khoa
+ * @description returns all the of the available vaccine lots of the medical unit 
+ * @return all medical unit's vaccine lots with status code = 200 
+ */
+router.get('/vaccineLots', async (req, res) => {
+    try {
+        const contract = await createContract();
+        const vaccineLotList = await contract.evaluateTransaction('GetAllLotsOf', 'medicalunit');
+        res.status(200).json(JSON.parse(vaccineLotList.toString()));
+    } catch(err) {
+        console.log("[ERROR]: " + err);
+    } finally {
+        disconnetGateway();
+    }
+})
 /**
  * @author Ngo Quoc Thai
  * @description divide the vaccine lot into ready-to-use vaccines

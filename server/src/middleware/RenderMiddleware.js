@@ -22,6 +22,10 @@ const medicalUnitPage = (req, res) => {
     res.render('medicalunit')
 }
 
+const medicalUnitDeliveryPage = (req, res) => {
+    res.render('medicalunitDelivery');
+}
+
 const getInfo = (req, res) => {
     const body = req.body;
     console.log(body);
@@ -34,4 +38,5 @@ module.exports = {
     manufacturerPage,
     manufacturerDeliveryPage,
     medicalUnitPage,
+    medicalUnitDeliveryPage,
 }
