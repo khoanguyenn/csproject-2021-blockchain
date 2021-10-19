@@ -5,6 +5,7 @@ const path = require('path');
 
 //File path resolving 
 const { serverRoot } = require("./pathUtil");
+const { buildCCPOrg } = require('./AppUtil');
 const caPath = path.join(serverRoot, 'src', 'helpers', 'CAUtil.js');
 const appPath = path.join(serverRoot, 'src', 'helpers', 'AppUtil.js');
 const walletPath = path.join(serverRoot, 'wallet');
@@ -27,6 +28,18 @@ const connectToCA = async (caHostName) => {
     };
 }
 
+const getMaterials = async (caHostName, walletPath, ccpOrg) => {
+    const ccp = buildCCPOrg(ccpOrg);
+    const wallet = await buildWallet(Wallets, walletPath);
+    const caClient = buildCAClient(FabricCAServices, ccp, caHostName);
+
+    return {
+        caClient,
+        wallet,
+    }
+}
+
 module.exports = {
-    connectToCA
+    connectToCA,
+    getMaterials
 };

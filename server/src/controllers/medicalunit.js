@@ -1,10 +1,47 @@
 const express = require("express");
+const { Wallets } = require("fabric-network");
 const router = express.Router();
+const path = require('path');
+const { buildWallet } = require("../helpers/AppUtil");
+const { serverRoot } = require("../helpers/pathUtil");
 const {createContract, disconnetGateway} = require ('../helpers/web_util')
 const RenderMiddleware = require('../middleware/RenderMiddleware');
 
 
 router.get('/', RenderMiddleware.medicalUnitPage)
+
+/**
+ * @author Nguyen Dang Khoa
+ * @description returns all of the available users of the medical unit
+ * @returns all users with status code = 200
+ */
+router.get('/users', async (req, res) => {
+    const walletPath = path.resolve(serverRoot, 'walletMedic');
+    const wallet = await buildWallet(Wallets, walletPath);
+    const userList = await wallet.list();
+    //Filter out the admin identity 
+    const result = userList.filter(user => user != 'admin');
+    res.status(200).json(result);
+
+})
+
+/**
+ * @author Nguyen Dang Khoa
+ * @description returns all of the available vaccines of medical unit
+ * @returns result with status code = 200
+ */
+router.get('/vaccines', async function (req, res) {
+    try {
+        const contract = await createContract();
+        const vaccineList = await contract.evaluateTransaction('GetAllVaccinesOf', 'medicalunit');
+        res.status(200).json(JSON.parse(vaccineList.toString()))
+    }
+    catch(err) {
+        console.log("[ERROR]: " + err);
+    } finally {
+        disconnetGateway();
+    }
+})
 
 /**
  * @author Ngo Quoc Thai
