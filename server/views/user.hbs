@@ -1,7 +1,208 @@
-<div class="container-fluid display-table">
-    <div class="row display-table-row">
-        {{> menuPartial }}
-        {{> passportPartial }}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {{#if isLoginPage}}
+        <link rel="stylesheet" href="/css/login.css">
+    {{/if}}
+    {{#if isUserPage}}
+        <link rel="stylesheet" href="/css/user.css">
+    {{/if}}
+    <link rel="stylesheet" href="/css/manufacturer.css">
+    <link rel="stylesheet" href="/css/drawer.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css" integrity="sha512-YWzhKL2whUzgiheMoBFwW8CKV4qpHQAEuvilg9FAn5VJUDwKZZxkJNuGM4XkWuk94WCrrwslk8yWNGmY1EduTA==" crossorigin="anonymous" referrerpolicy="no-referrer" />    
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"
+            integrity="sha384-oesi62hOLfzrys4LxRF63OJCXdXDipiYWBnvTl9Y9/TRlw5xlKIEHpNyvvDShgf/"
+            crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" integrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@linways/table-to-excel@1.0.4/dist/tableToExcel.min.js"></script>
+    <title>Login Form</title>
+</head>
+<body>
+    <div class="container-fluid display-table fullheight">
+        <div class="row display-table-row fullheight">
+            <div class="col-md-2 col-sm-1 hidden-xs display-table-cell v-align box" id="navigation">
+                    <div class="logo">
+                    <i class="fa-solid fa-shield-virus"></i><span> Vaccine System</span>
+                </div>
+                <div class="navi">
+                    <ul class="navi__menu">
+                        <li class="active"><a href="/user"><i class="fas fa-home" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Home</span></a></li>
+                        <li><a href="/manufacturer/delivery"><i class="fa fa-tasks" aria-hidden="true" data-target="#add_project"></i><span class="hidden-xs hidden-sm">Delivery Logs</span></a></li>
+                        <li><a href="#"><i class="fa fa-bar-chart" aria-hidden="true"></i><span class="hidden-xs hidden-sm">Vaccinate Status</span></a></li>
+                    </ul>
+                    <li class="navi__logout"><a href="/auth/logout"><i class="fa-solid fa-right-from-bracket"></i><span class="hidden-xs hidden-sm">Log Out</span></a></li>
+                </div>
+            </div>
+            <div class="col-auto p-3 d-flex flex-column justify-content-center">
+                    <header class="mb-3">
+                        <h1>Lion's vaccine system</h1>
+                    </header>
+                    <section id="card-display" class="d-flex">
+                        <div class="card mx-auto" style="width: 25rem; height: 35rem">
+                            <img class="card-img-top" src="https://file3.qdnd.vn/data/images/0/2021/10/08/vuongthuy/09102021vthuy1.jpg?dpi=150&quality=100&w=870" alt="Card image cap">
+                                <div class="card-body">
+                                    <h5 class="card-title">Vo Thanh Minh Khoi</h5>
+                                    <div class="form-group row my-3">
+                                        <label for="vaccine-id" class="col-4 col-form-label">Vaccine ID</label>
+                                        <div class="col-8">
+                                        <input readonly type="text" class="form-control" id="vaccine-id" placeholder="Loading...">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row my-3">
+                                        <label for="vaccine-status" class="col-4 col-form-label">Status</label>
+                                        <div class="col-8 my-auto">
+                                        <span class="badge bg-success text-light">Fully Taken</span>
+                                        </div>
+                                        
+                                    </div>
+                                    <button href="#" class="btn btn-primary" data-toggle="modal" data-target="#moreInfo" data-whatever="Khoa">See details</button>
+                                </div>
+                        </div>
+
+
+                    </section>
+                    <footer class="text-right">
+                        Copyright by Khoi and Khoa
+                    </footer>
+            </div>
+        </div>
     </div>
 
-</div>
+    <div class="modal fade" id="moreInfo" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Vaccine Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="modal-body__form">
+                   
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="confirm-button" data-dismiss="modal">
+                    <i class="fas fa-check"></i>
+                    <span class="ml-1">Confirm</span>
+                </button>
+            </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+    $('vaccine-details').on('click', () => {
+        const modalForm = $('modal-body form');
+        const vaccineDetail = `
+                    <h2>First vaccine</h2>              
+                    <div class="row">
+                        <div class="form-group col">
+                            <label for="manufacturer" class="col-form-label">Manufacturer:</label>
+                            <input class="form-control" id="manufacturer"></input>
+                        </div>
+                        <div class="form-group col">
+                            <label for="vaccine-name" class="col-form-label">Vaccine name:</label>
+                            <input class="form-control" id="vaccine-name"></input>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col">
+                            <label for="manufacturer" class="col-form-label">Vaccine ID:</label>
+                            <input class="form-control" id="manufacturer"></input>
+                        </div>
+                        <div class="form-group col">
+                            <label for="vaccine-name" class="col-form-label">Vaccine name:</label>
+                            <input class="form-control" id="vaccine-name"></input>
+                        </div>
+                    </div>`
+        
+    })
+    getVaccinePassport("khoanguyenn");
+    function getVaccinePassport(userId) {
+        $.ajax(`http://localhost:3000/medical-unit/vaccinate?userID=${userId}`)
+            .done(function(data) {
+                //Convert list to list of users
+                const vaccineList = data.map(user => user.Record);
+                console.log
+                vaccineList.map(vaccine => {
+                    const vaccineOwner = vaccine["owner"];
+                    const vaccineName = vaccine["vaccineName"];
+                    const vaccineId = vaccine["vaccineID"]
+                    const vaccineStatus = vaccineList.length < 2 ? 
+                        `<span class="badge bg-warning text-dark">Not fully taken</span>` :
+                        `<span class="badge bg-success text-light">Fully taken</span>`
+                    const card = `
+                        <div class="card mx-auto" style="width: 25rem; height: 35rem">
+                            <img class="card-img-top" src="https://file3.qdnd.vn/data/images/0/2021/10/08/vuongthuy/09102021vthuy1.jpg?dpi=150&quality=100&w=870" alt="Card image cap">
+                            <div class="card-body">
+                                <h5 class="card-title">${vaccineOwner}</h5>
+                                <div class="form-group row my-3">
+                                    <label for="vaccine-id" class="col-4 col-form-label">Vaccine ID</label>
+                                    <div class="col-8">
+                                    <input readonly type="text" class="form-control" id="vaccine-id" placeholder="${vaccineId}"/>
+                                    </div>
+                                </div>
+                                <div class="form-group row my-3">
+                                    <label for="vaccine-status" class="col-4 col-form-label">Status</label>
+                                    <div class="col-8 my-auto">
+                                    ${vaccineStatus}
+                                    </div>
+                                    
+                                </div>
+                                <button id="vaccine-details" class="btn btn-primary" data-toggle="modal" data-target="#moreInfo">See details</button>
+                            </div>
+                        </div>`;
+                    const displayContext = $('#card-display')
+                    displayContext.append(card);
+                    return vaccineList;
+                })
+            })
+            .then(function (data) {
+                const vaccineList = data.map(user => user.Record);
+                const vaccineContent = $('#modal-body__form');
+                console.log(vaccineContent)
+                vaccineList.map(vaccine => {
+                    const {vaccineManufacturer, vaccineName, vaccineID, dateOfManufacturer} = vaccine;
+                    const dateForm = dateOfManufacturer.split('/').reverse().join('/');
+                    const vaccineDetail = `
+                    <div class="row">
+                        <div class="form-group col">
+                            <label for="manufacturer" class="col-form-label">Manufacturer:</label>
+                            <input readonly class="form-control" id="manufacturer" value="${vaccineManufacturer}"></input>
+                        </div>
+                        <div class="form-group col">
+                            <label for="vaccine-date" class="col-form-label">Manufacture date:</label>
+                            <input readonly class="form-control" id="vaccine-date" type="date" value="${dateForm}"></input>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col">
+                            <label for="vaccine-" class="col-form-label">Vaccine ID:</label>
+                            <input readonly class="form-control" id="vaccine-" value="${vaccineID}"></input>
+                        </div>
+                        <div class="form-group col">
+                            <label for="vaccine-name" class="col-form-label">Vaccine name:</label>
+                            <input readonly class="form-control" id="vaccine-name" value="${vaccineName}"></input>
+                        </div>
+                    </div>`;
+                    vaccineContent.append(vaccineDetail);
+                })
+                
+            })
+
+    }
+</script>
+</html>

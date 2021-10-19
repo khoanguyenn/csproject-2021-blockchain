@@ -4,6 +4,7 @@ const TestController = require('../controllers/TestController');
 const DistributorController = require("../controllers/distributor");
 const MedicalUnitController = require("../controllers/medicalunit");
 const ManufacturerController=require("../controllers/ManufacturerController");
+const UserController = require('../controllers/UserController')
 
 //Init ledger
 const { createContract, disconnetGateway} = require('../helpers/web_util');
@@ -22,15 +23,12 @@ const { serverRoot } = require("../helpers/pathUtil");
 const initApp = (app) => {
     app.use("/auth",  AuthController)
     app.use("/manufacturer", ManufacturerController);
-    app.use("/distributor", DistributorController)
-    app.use("/medical-unit", MedicalUnitController)
+    app.use("/distributor", DistributorController);
+    app.use("/medical-unit", MedicalUnitController);
+    app.use("/user", UserController)
 
+    //This route is used for testing purpose only
     app.use('/test', TestController)
-    app.get('/manufacturer', (req, res) => {
-        res.render('manufacturer', {
-            isUserPage: true
-        });
-    })
 }
 
 //This function to initialize some mock data for development purposes
