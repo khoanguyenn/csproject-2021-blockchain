@@ -1,7 +1,10 @@
 const express = require("express")
 const router = express.Router()
 const {createContract, disconnetGateway}=require('../helpers/web_util')
+const RenderMiddleware = require("../middleware/RenderMiddleware");
 
+router.get("/", RenderMiddleware.distributorPage);
+router.get("/delivery", RenderMiddleware.distributorDeliveryPage);
 /**
  * @author Ha Xuan Huy
  * @returns all vaccine lots from distributor

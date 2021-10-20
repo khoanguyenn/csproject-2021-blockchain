@@ -154,7 +154,39 @@
             "vaccineLot": vaccineLot,
             "toMedicalUnit": vaccineMedical,
         }
-
+        $.ajax({
+            type: 'PUT',
+            url: 'http://localhost:3000/distributor/delivery',
+            contentType: 'application/json',
+            data: JSON.stringify(changeData),
+            beforeSend: function () {
+                console.log(this.data);
+                Swal.fire({
+                    title: "Sending data",
+                    text: "Vaccine lot is delivering...",
+                    icon: "info",
+                    timerProgressBar: true,
+                    didOpen: () => {
+                        Swal.showLoading();
+                    }
+                })
+            }
+        })
+        .done(function (msg) {
+            Swal.fire({
+                icon: 'success',
+                title: 'All done!',
+                html: `Vaccine lot number <code>${vaccineLot}</code> has been successfully delivered`,
+            })
+        }).fail(function (msg) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Something went wrong, please try again!',
+                })
+        }).always(function () {
+            fetchAllDeliveryLogs();
+        });
         console.log(changeData);
     })
     $('#search-bar').on('input', () => {

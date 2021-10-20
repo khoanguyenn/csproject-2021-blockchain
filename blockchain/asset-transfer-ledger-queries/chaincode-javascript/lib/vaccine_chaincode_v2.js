@@ -1,7 +1,5 @@
 'use strict';
 const {Contract} = require('fabric-contract-api');
-const shim = require('fabric-shim');
-
 
 class Chaincode extends Contract {
 
@@ -214,7 +212,7 @@ await this.CreateVaccineLot(
  vaccineLot.vaccineName,       
 vaccineLot.vaccineQuantity,
 vaccineLot.dateOfManufacturer
-); 
+);
 }
 }
 
@@ -282,14 +280,26 @@ const vaccines = [
 {
  vaccineID: 'Thai12',
  vaccineName: 'astra',
- vaccineManufacturer: 'org1',
- dateOfManufacturer:'69/69/69'
+ vaccineManufacturer: 'distributor',
+ dateOfManufacture:'10/18/2021'
 },
 {
  vaccineID: 'Huy012',
  vaccineName: 'mordena',
- vaccineManufacturer: 'org1',
- dateOfManufacturer:'69/69/69'
+ vaccineManufacturer: 'distributor',
+ dateOfManufacture:'10/9/2021'
+},
+{
+  vaccineID: 'Khoa012',
+  vaccineName: 'astra',
+  vaccineManufacturer: 'distributor',
+  dateOfManufacture: '10/10/2021'
+},
+{
+  vaccineID: 'Khoa014',
+  vaccineName: 'moderna',
+  vaccineManufacturer: 'distributor',
+  dateOfManufacture: '10/09/2021'
 }
 ];
 
@@ -503,11 +513,11 @@ async DeleteDistributorLot(ctx, lotNo) {
 
    async CheckVaccinateState(ctx, userID){
     let queryString = {};
-queryString.selector = {};
-queryString.selector.docType = 'vaccine';
-queryString.selector.owner = userID;
-return await this.GetQueryResultForQueryString(ctx, JSON.stringify(queryString));
-}
+    queryString.selector = {};
+    queryString.selector.docType = 'vaccine';
+    queryString.selector.owner = userID;
+    return await this.GetQueryResultForQueryString(ctx, JSON.stringify(queryString));
+  }
 
 /**
  * @author Ngo Quoc Thai
@@ -611,7 +621,6 @@ async VaccineExists(ctx, vaccineID) {
   return  assetState && (assetState.length > 0);
 }
 
-
 /**
  * @author Pham Minh Huy
  * @param {*} ctx
@@ -636,62 +645,42 @@ async VaccineExists(ctx, vaccineID) {
  */
   
   async GetDeliveryLogsOf(ctx,lotNo,owner){
-    let queryString = {};
-    queryString.selector = {};
-    queryString.selector.docType = 'vaccineLot';
-    var keyList=[]
-    let listAll= await this.GetQueryResultForQueryString(ctx, JSON.stringify(queryString));
-    let listAll2=JSON.parse(listAll)
-    let leng=listAll2.length
-    for(var i=0;i<leng;i++){
-       keyList.push(listAll2[i].Record.vaccineLot)
-    }
-    let finalResults=[]
-    let debugg=[]
-    for(var i=0;i<keyList.length;i++){
-      debugg.push(i)
-      let resultWS=[]
-      let iterator = await ctx.stub.getHistoryForKey(keyList[i]);
-      let res = await iterator.next();
-      while (!res.done) {
-        if (res.value) {
-          
-          const objStr = res.value.value.toString('utf8');
-          //obj.timestamp=toDate(res.value.timestamp)
-          resultWS.push(objStr);
-        }
-        res = await iterator.next();
+    let iterator = await ctx.stub.getHistoryForKey(lotNo);
+    let result = [];
+    let res = await iterator.next();
+    while (!res.done) {
+      if (res.value) {
+        console.info(`found state update with value: ${res.value.value.toString('utf8')}`);
+        const obj = JSON.parse(res.value.value.toString('utf8'));
+        obj.timestamp=toDate(res.value.timestamp)
+        result.push(obj);
       }
-      await iterator.close();
-      //now the result contain the whole history string
-      debugg.push(typeof resultWS)
-      var stringy= resultWS.toString()
-      debugg.push(stringy)
-      var boole= stringy.includes("\"owner\":\""+owner+"\"");     
-      debugg.push(boole)
-      if (boole){
-          finalResults.push(keyList[i])
-      }
-      
+      res = await iterator.next();
     }
-    return finalResults
-
-    
-    // function toDate(timestamp) {
-    //   const milliseconds = (timestamp.seconds.low + (timestamp.nanos / 1000000000)) * 1000;
-    //   return new Date(milliseconds).toString();
-    // }
-
-
-    // for(var i=0;i<keyList.length;i++){
-    //    if (wasFrom1(ctx,lotNo,owner))
-    // }
-    
-    
-    
+    await iterator.close();
+    return result;  
+    function toDate(timestamp) {
+      const milliseconds = (timestamp.seconds.low + (timestamp.nanos / 1000000000)) * 1000;
+      return new Date(milliseconds).toString();
+    }
 
     
   }
+  
+  /** 
+   * @author: Pham Minh Huy
+   * @param {*} ctx
+   * @param {String} owner
+   * @returns  list of all vaccines assigned to an owner
+  */
+  async GetAllVaccinesOf(ctx, owner){
+    let queryString = {};
+      queryString.selector = {};
+    queryString.selector.owner = owner;//might wanna add uppercase all
+    return await this.GetQueryResultForQueryString(ctx, JSON.stringify(queryString)); 
+  }
+
+
 
 }
   

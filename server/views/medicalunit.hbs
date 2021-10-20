@@ -63,7 +63,7 @@
                         <input class="form-control" id="to-date" type="date"></input>
                     </div>
                 </div>
-                <div class=" col-md-auto dropdown mr-5">
+                <div class=" col-md-auto dropdown">
                     <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-expanded="false">
                         Action
                     </a>
@@ -71,6 +71,12 @@
                         <li><a class="dropdown-item" id="export-pdf" role="button"><i class="fas fa-file-pdf mr-2"></i>Export to PDF</a></li>
                         <li><a class="dropdown-item" id="export-excel" role="button"><i class="fas fa-file-excel mr-2"></i>Export to Exel</a></li>
                     </ul>
+                </div>
+                <div class="col-md-auto">
+                    <button href="#" data-toggle="modal" data-target="#exampleModal" type="button" class="btn btn-primary" id="divide-vaccine">
+                        <i class="fas fa-divide"></i>
+                        <span class="ml-1">Divide vaccine</span>
+                    </button>
                 </div>
 
             </div>
@@ -84,7 +90,7 @@
                         <th scope="col">Medical unit</th>
                         <th scope="col">Name</th>
                         <th scope="col">Quantity</th>
-                    </tr>
+                    </tr>   
                     </tbody>
             </table>
         </div>
@@ -95,7 +101,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Create new vaccine</h5>
+            <h5 class="modal-title" id="exampleModalLabel">Divide vaccine</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
             </button>
@@ -103,22 +109,11 @@
         <div class="modal-body">
             <form>
                 <div class="row">
-                    <div class="form-group col">
-                        <label for="medicalUnit" class="col-form-label">medicalUnit:</label>
-                        <input class="form-control" id="medicalUnit"></input>
+                    <div class="form-group col mb-0">
+                        <label for="vaccine-lot" class="col-form-label">Lot number:</label>
+                        <select class="form-control" id="vaccine-lot">
+                        </select>
                     </div>
-                    <div class="form-group col">
-                        <label for="vaccine-name" class="col-form-label">Vaccine name:</label>
-                        <input class="form-control" id="vaccine-name"></input>
-                    </div>
-                </div>
-                <div class="form-group">
-                <label for="vaccine-quantity" class="col-form-label">Vaccine quantity:</label>
-                <input class="form-control" id="vaccine-quantity" type="number"></input>
-                </div>
-                <div class="form-group">
-                    <label for="vaccine-date" class="col-form-label">Date of Manufacture:</label>
-                    <input class="form-control" id="vaccine-date" type="date"></input>
                 </div>
             </form>
         </div>
@@ -133,70 +128,22 @@
     </div>
 </div>
 
-<div class="modal fade" id="updateModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-        <div class="modal-header">
-            <h5 class="modal-title"><i class="fas fa-syringe mr-2"></i>Update new vaccine</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
-        <div class="modal-body">
-            <form>
-                <div class="row">
-                    <div class="form-group col">
-                        <label for="vaccine-lot__update" class="col-form-label">Lot number:</label>
-                        <input class="form-control" id="vaccine-lot__update" readonly></input>
-                    </div>
-                    <div class="form-group col">
-                        <label for="vaccine-name__update" class="col-form-label">Vaccine name:</label>
-                        <input class="form-control" id="vaccine-name__update"></input>
-                    </div>
-                </div>
-                <div class="form-group">
-                <label for="vaccine-quantity__update" class="col-form-label">Vaccine quantity:</label>
-                <input class="form-control" id="vaccine-quantity__update" type="number"></input>
-                </div>
-                <div class="form-group">
-                    <label for="vaccine-date__update" class="col-form-label">Date of Manufacture:</label>
-                    <input class="form-control" id="vaccine-date__update" type="date"></input>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary" id="save-button" data-dismiss="modal">
-                <i class="fas fa-check"></i>
-                <span class="ml-1">Save</span>
-            </button>
-        </div>
-        </div>
-    </div>
-</div>
 
 </body>
 <script>
     fetchAllVaccineLots()
     $('#confirm-button').on('click', () => {
-        const medicalUnit = $('#exampleModal #medicalUnit').val()
-        const vaccineName = $('#exampleModal #vaccine-name').val();
-        const vaccineQuantity = $('#exampleModal #vaccine-quantity').val();
-        const vaccineDate = $('#exampleModal #vaccine-date').val();
-        const vaccineDateFormat =  Intl.DateTimeFormat('en-GB').format(new Date(vaccineDate));
+        const vaccineLotNumber = $('#vaccine-lot').val();
         
-        const newVaccineLot = { 
-            "medicalUnit": medicalUnit, 
-            "name": vaccineName, 
-            "quantity": vaccineQuantity,
-            "dateOfManufacture": vaccineDateFormat, 
+        const dividedLot = { 
+            "vaccineLot": vaccineLotNumber,
         } 
-
+        console.log(dividedLot);
         $.ajax({
             type: 'POST',
-            url: 'http://localhost:3000/medical-unit/vaccines',
+            url: 'http://localhost:3000/medical-unit/vaccinate',
             contentType: 'application/json',
-            data: JSON.stringify(newVaccineLot),
+            data: JSON.stringify(dividedLot),
             beforeSend: function () {
                 console.log(this.data);
                 Swal.fire({
@@ -229,55 +176,6 @@
         //$('#exampleModal').modal('hide');
         //$('body').removeClass('modal-open');
         //$('.modal-backdrop').remove();
-
-    })
-    $('#save-button').on('click', () => {
-        const vaccineLot = $('#vaccine-lot__update').val()
-        const vaccineName = $('#vaccine-name__update').val();
-        const vaccineQuantity = $('#vaccine-quantity__update').val();
-        const vaccineDate = $('#vaccine-date__update').val();
-        const vaccineDateFormat =  Intl.DateTimeFormat('en-GB').format(new Date(vaccineDate));
-        
-        const updateVaccineLot = { 
-            "vaccineLot": vaccineLot, 
-            "name": vaccineName, 
-            "quantity": vaccineQuantity,
-            "dateOfManufacture": vaccineDateFormat, 
-        }
-
-        $.ajax({
-            type: 'PUT',
-            url: 'http://localhost:3000/medical-unit/vaccineLots',
-            contentType: 'application/json',
-            data: JSON.stringify(updateVaccineLot),
-            beforeSend: function () {
-                console.log(this.data);
-                Swal.fire({
-                    title: "Sending data",
-                    text: "Data is uploading...",
-                    icon: "info",
-                    timerProgressBar: true,
-                    didOpen: () => {
-                        Swal.showLoading();
-                    }
-                })
-            }
-        })
-        .done(function (msg) {
-            Swal.fire({
-                icon: 'success',
-                title: 'All done!',
-                text: 'A new vaccine lot has been created!',
-            })
-        }).fail(function (msg) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Something went wrong, please try again!',
-                })
-        }).always(function () {
-            fetchAllVaccineLots();
-        });
 
     })
     $('#search-bar').on('input', () => {
@@ -360,104 +258,11 @@
                     for (let vaccineCell in vaccineLot) {
                         row.insertCell(-1).innerHTML = vaccineLot[vaccineCell]
                     }
-                    const actionCell = $(row.insertCell(-1));
-                    const editBtn = document.createElement("button");
-                    const deleteBtn = document.createElement("button");
-
-                    //Append to cell
-                    actionCell.append(editBtn);
-                    actionCell.append(deleteBtn);
-
-                    //Select buttons by jQuery
-                    const editButton = $(editBtn);
-                    const deleteButton = $(deleteBtn);
-
-                    //Add CSS and icon to button
-                    editButton.addClass('btn btn-success mr-2');
-                    deleteButton.addClass('btn btn-danger');
-                    editButton.append('<i class="fas fa-edit ml-1"></i>')
-                    deleteButton.append('<i class="fas fa-trash"></i>')
-
-                    //Add functionality to edit button
-                    editButton.on('click', function () {
-                        const selectedRow = $(this).parents('tr');
-                        const vaccineData = selectedRow.children(':not(:last-child)');
-                        
-                        //Mapping data to modal
-                        const vaccineLot = vaccineData[3].innerHTML;
-                        const vaccineName = vaccineData[5].innerHTML;
-                        const vaccineQuantity = vaccineData[6].innerHTML;
-                        const vaccineDate = vaccineData[0].innerHTML;
-                        const vaccineDateFormat = vaccineDate.split('/').reverse().join('-');
-
-                        //Show to modal update
-                        $('#updateModal').modal('toggle');
-                        $('#vaccine-lot__update').val(vaccineLot);
-                        $('#vaccine-name__update').val(vaccineName);
-                        $('#vaccine-quantity__update').val(vaccineQuantity);
-                        $('#vaccine-date__update').val(vaccineDateFormat);
-                    })
-
-                    //Add functionality to delete button
-                    deleteButton.on('click', function () {
-                        const selectedRow = $(this).parents('tr');
-                        const vaccineData = selectedRow.children(':not(:last-child)');
-
-                        //Get vaccine's lot
-                        const vaccineLot = vaccineData[3].innerHTML;
-
-                        //Delete data
-                        const deleteData = {
-                            "vaccineLot": vaccineLot
-                        }
-
-                        Swal.fire({
-                            title: 'Are you sure?',
-                            text: "You won't be able to revert this!",
-                            icon: 'warning',
-                            showCancelButton: true,
-                            confirmButtonColor: '#3085d6',
-                            cancelButtonColor: '#d33',
-                            confirmButtonText: 'Yes, delete it!'
-                            }).then((result) => {
-                            if (result.isConfirmed) {
-                                $.ajax({
-                                    type: 'DELETE',
-                                    url: 'http://localhost:3000/medicalUnit/vaccines',
-                                    contentType: 'application/json',
-                                    data: JSON.stringify(deleteData),
-                                    beforeSend: function () {
-                                        Swal.fire({
-                                            title: "Sending data",
-                                            text: "Data is uploading...",
-                                            icon: "info",
-                                            timerProgressBar: true,
-                                            didOpen: () => {
-                                                Swal.showLoading();
-                                            }
-                                        })
-                                    }
-                                }).done(function (msg) {
-                                    Swal.fire({
-                                        icon: 'success',
-                                        title: 'All done!',
-                                        text: `The vaccine id=${vaccineLot} is deleted`,
-                                    })
-                                }).fail(function (msg) {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Oops...',
-                                        text: 'Something went wrong, please try again!',
-                                        })
-                                }).always(function () {
-                                    fetchAllVaccineLots();
-                                });
-                            }
-                        })
-
-                    })
-
+                    console.log(vaccineLot);
+                    $('#vaccine-lot').append(`<option>${vaccineLot.vaccineLot}</option>`);
                 }
+                //Insert vaccine lot number to select
+
             })
     }
 

@@ -7,64 +7,102 @@
 
 //Dependencies
 const bcrypt = require("bcrypt");
+const path = require("path");
+const { Wallets } = require("fabric-network");
+const { buildWallet } = require("../helpers/AppUtil");
 
 //Helper functions
 const AuthService = require("../helpers/AuthService");
 const {registerAndEnrollUser} = require('../helpers/CAUtil');
+const { serverRoot } = require("../helpers/pathUtil");
 
 //Configuration
-const mspOrg1 = 'ManufacturerMSP';
-const mspAddress = 'ca.Manufacturer.example.com'
 const salt = "$2b$10$J0HvW7R6cIMsagwfPPZ2JO";
+
+const mspOrgs = {
+    "manufacturer": "ManufacturerMSP",
+    "distributor": "DistributorMSP",
+    "medicalunit": "MedicalunitMSP",
+}    
+
+const caHostnameList = {
+    "manufacturer": "ca.Manufacturer.example.com",
+    "distributor": "ca.Distributor.example.com",
+    "medicalunit": "ca.Medicalunit.example.com",
+}
+
+const walletFolder = {
+    "manufacturer": "wallet",
+    "distributor": "walletDistributor",
+    "medicalunit": "walletMedic",
+}
+
+const affiliationList = {
+    "manufacturer": "manufacturer.department1",
+    "distributor": "distributor.department1",
+    "medicalunit": "medicalunit.department1",
+}
+
+const roleList = ["manufacturer", "distributor", "medicalunit"];
 
 const signup = async (req, res) => {
     try{
         //Check if username and password are in correct form
-        const {username, password} = req.body;
+        const {username, password, role} = req.body;
         if (!username && !password) {
             throw Error(`Please provide username and passsword!`);
         }
-        
-        //Create the hash string for username and password
+        if (!roleList) {
+            throw Error("Please specify the signup role");
+        }
+        if (!roleList.includes(role)) {
+            throw Error(`There is no ${role} role`);
+        }
+        //Get connection materials
+        const caHostname = caHostnameList[role];
+        const walletPath = path.resolve(serverRoot, walletFolder[role]);
+        const { caClient, wallet } = await AuthService.getMaterials(caHostname, walletPath, role);
+
         const concatStr = username + password;
-        const { caClient, wallet } = await AuthService.connectToCA(mspAddress);
         const userId = await bcrypt.hashSync(concatStr, salt);
 
-        //Find the available identities
+        //Find the available identites
         const userIdentity = await wallet.get(userId);
         if (userIdentity) {
 			throw Error(`An identity for the user ${userId} already exists in the wallet`);
         }
-
         //Enroll new user
-        await registerAndEnrollUser(caClient, wallet, mspOrg1, userId, 'manufacturer.department1'); 
-        // console.log(await wallet.list())
-
+        const mspOrg = mspOrgs[role];
+        const affiliation = affiliationList[role];
+        await registerAndEnrollUser(caClient, wallet, mspOrg, userId, affiliation); 
         req.userId = userId;
-        res.send(`User ${userId} sign up successfully!`);
+        res.json({
+            message: `User ${userId} sign up successfully!`
+        })
     }
     catch(err){
         console.log("[ERROR]: " + err);
-        res.status(400).send(err);
+        res.status(400).json({
+            message: err.message
+        })
     }
 }
 
 
-const login = async (req, res, next) => {
+const authenticate = async (req, res, next) => {
     try{
         const {username, password} = req.body;
         const concatStr = username + password;
-        const { wallet } = await AuthService.connectToCA("ca.Manufacturer.example.com")
 
         //Check the available user identity
         const userId = await bcrypt.hashSync(concatStr, salt);
-
-        const userIdentity = await wallet.get(userId);
-        if (!userIdentity) {
+        const { wallet, userRole } = await getRole(userId);
+        if (!userRole && !wallet) {
             throw Error("Invalid username and password!");
         }
 
         req.userId = userId;
+        req.role = userRole;
         const expireDate = getExpireDate(60);
         console.log(expireDate);
         res.cookie("userId", userId, {
@@ -87,14 +125,16 @@ const verifyToken = async (req, res, next) => {
     try {
         const token = req.cookies;
         const userId = token.userId;
-        if (!token && !userId) {
+        if (!userId) {
             throw Error("Please login before moving on!");
         }
         req.userId = userId;
         next();
     } catch(err) {
         console.log("[ERROR]: " + err);
-        res.status(400).send(err);
+        res.status(400).json({
+            "message": err.message
+        });
     }
 }
 
@@ -108,61 +148,86 @@ const verifyToken = async (req, res, next) => {
 const isManufacturer = async (req, res, next) => {
     console.log('Manufacturer: ' + req.userId);
     try {
-        const role = await getRole("ca.Manufacturer.example.com", req.userId);
+        const {userRole: role} = await getRole(req.userId);
         console.log("Role: " + role);
-        if (role !== 'manufacturer') {
-            throw Error("this route is not for you, only for manufacturer");
+        if (role === "manufacturer") {
+            next();
         }
-        next();
-
     } catch(err) {
-        res.send(err.message);
+        console.log("[ERROR]: " + err);
+        
     }
 }
 
 const isDistributor = async (req, res, next) => {
     try {
-        const role = await getRole("ca.Distributor.example.com", req.userId);
-        if (role !== 'distributor') {
-            throw Error("this route is not for you, only for manufacturer");
+        const {userRole: role} = await getRole(req.userId);
+        if (role === "distributor") {
+            next();
         }
-        next();
-
+        
     } catch(err) {
-        res.send(err.message);
+        console.log("[ERROR]: " + err);
     }
+    next();
+
 }
 
 const isMedicalUnit = async (req, res, next) => {
     try {
-        const role = await getRole("ca.MedicalUnit.example.com", req.userId);
-        if (role !== 'medicalunit') {
-            throw Error("this route is not for you, only for manufacturer");
+        const {userRole: role} = await getRole(req.userId);
+        if (role === 'medicalunit') {
+            next();
         }
-        next();
-
     } catch(err) {
-        res.send(err.message);
+        console.log("[ERROR]: " + err);
     }
 }
+/**======================Helper functions======================*/
 
-/**
- * 
- * @param {String} CAHostName 
- * @param {String} userId 
- * @returns {String} role
- * This utilizity function try to find the role of given user's id
- */
-const getRole = async (CAHostName, userId) => {
-    const { wallet } = await AuthService.connectToCA(CAHostName)
-    const userIdentity = await wallet.get(userId);
-    if (!userIdentity) {
-        throw Error("Invalid token!");
+//Check the role base on userId
+const checkRole = (req, res) => {
+    const userRole = req.role;
+    const redirectList = {
+        "manufacturer": "/manufacturer",
+        "distributor": "/distributor",
+        "medicalunit": "/medical-unit",
     }
-    const { mspId } = userIdentity;
+    const destination = redirectList[userRole];
+    res.redirect(destination);
+}
+
+const getRole = async (userId) => {
+    const roles = ["manufacturer", "distributor", "medicalunit"];
+    let wallet = {};
+    let mspId = "";
+    for (const role of roles) {
+        let walletFolder = "";
+
+        if (role === "manufacturer") {
+            walletFolder = "wallet";
+        }
+        if (role === "distributor") {
+            walletFolder = "walletDistributor"
+        }
+        if (role == "medicalunit") {
+            walletFolder = "walletMedic"
+        }
+        const walletPath = path.resolve(serverRoot, walletFolder);
+        const tempWallet = await buildWallet(Wallets, walletPath);
+        const userIdentity = await tempWallet.get(userId);
+        if (userIdentity) {
+            wallet = tempWallet;
+            mspId = userIdentity.mspId;
+            break;
+        }
+    }
     //Attach the role for later check
-    const role = mspId.substring(0, mspId.length - 3).toLowerCase();
-    return role;
+    const userRole = mspId.substring(0, mspId.length - 3).toLowerCase();
+    return {
+        wallet,
+        userRole,
+    };
 }
 
 /**
@@ -178,8 +243,9 @@ const getExpireDate = (minute) => {
 
 module.exports = {
     signup,
-    login,
+    authenticate,
     logout,
+    checkRole,
     verifyToken,
     isManufacturer,
     isDistributor, 
