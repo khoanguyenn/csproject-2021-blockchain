@@ -1,7 +1,7 @@
 //Controllers
 const AuthController = require("../controllers/AuthController");
 const TestController = require('../controllers/TestController');
-const DistributorController = require("../controllers/distributor");
+const DistributorController = require("../controllers/DistributorController");
 const MedicalUnitController = require("../controllers/medicalunit");
 const ManufacturerController=require("../controllers/ManufacturerController");
 const UserController = require('../controllers/UserController')

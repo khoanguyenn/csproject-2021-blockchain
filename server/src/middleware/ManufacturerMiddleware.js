@@ -71,6 +71,8 @@ const createVaccineLot = async (req, res) => {
             var key1 =String(req.body.manufacturer)
             var key2 =String(req.body.name)
             var key3 =String(req.body.quantity)
+            let bool = /^\d+$/.test(key3);
+            if (!bool){key3=10000}
             var key4 =String(req.body.dateOfManufacture)
               const contract = await createContract();
               await contract.submitTransaction('CreateVaccineLot', key1,key2,key3,key4);
@@ -144,6 +146,8 @@ const updateVaccineLot = async (req, res) => {
       var key1 =String(req.body.vaccineLot)
       var key2 =String(req.body.name)
       var key3 =String(req.body.quantity)
+      let bool = /^\d+$/.test(key3);
+      if (!bool){key3=10000}
       var key4 =String(req.body.dateOfManufacture)
       const contract = await createContract();
 

@@ -675,8 +675,9 @@ async VaccineExists(ctx, vaccineID) {
   */
   async GetAllVaccinesOf(ctx, owner){
     let queryString = {};
-      queryString.selector = {};
-    queryString.selector.owner = owner;//might wanna add uppercase all
+    queryString.selector = {};
+    queryString.selector.docType = 'vaccine';
+    queryString.selector.owner = owner;//might want to add uppercase all
     return await this.GetQueryResultForQueryString(ctx, JSON.stringify(queryString)); 
   }
 

@@ -1,5 +1,4 @@
-const express = require("express")
-const router = express.Router()
+
 const securityModule=require("../helpers/secur_util")
 const {createContract, disconnetGateway}=require('../helpers/web_util')
 
@@ -7,7 +6,7 @@ const {createContract, disconnetGateway}=require('../helpers/web_util')
  * @author Ha Xuan Huy
  * @returns all vaccine lots from distributor
  */
- router.get("/vaccines", async function (req, res) {
+const GetDistributorLots=async (req, res) =>{
   try {
       const contract = await createContract();
       console.log(`GET all vaccine lots from distributor`)
@@ -20,13 +19,13 @@ const {createContract, disconnetGateway}=require('../helpers/web_util')
   } finally {
     disconnetGateway();
   }
-})
+}
 
 /**
  * @author Ha Xuan Huy
  * @returns a vaccine lot with given ID from distributor
  */
- router.get("/vaccines/:vaccineID", async function (req, res) {
+const getVaccineLot = async  (req, res)=> {
   let key=req.params.vaccineID
   if(securityModule.hasSpecChar(key)){
     try {
@@ -42,7 +41,7 @@ const {createContract, disconnetGateway}=require('../helpers/web_util')
     }
   }
   else return res.send("The ID provided contains special characters")
-})
+}
 
 
 // PUT /distributor/delivery with body request {"vaccineLot":"value"}
@@ -50,7 +49,7 @@ const {createContract, disconnetGateway}=require('../helpers/web_util')
  * @author Ha Xuan Huy
  * @returns deliver vaccine lot with given ID to medical unit
  */
- router.put("/delivery", async function (req, res) {
+const deliverToMedicalUnit =  async (req, res)=> {
   var format1= ["vaccineLot"]
   if(securityModule.JSONvalidator(req.body,format1.length,format1)){
     try {
@@ -68,14 +67,14 @@ const {createContract, disconnetGateway}=require('../helpers/web_util')
   }
   else return res.send("wrong format")
   
-})
+}
 
 
 /**
  * @author Pham Minh Huy
  * @returns all vaccine lot that HAS BEEN, at some interval of time, under DISTRIBUTOR
  */
- router.get("/logs", async function (req, res) {
+const retrieveLogs=async (req, res)=> {
   try {
       let dummyVal="dummy"
       const contract = await createContract();
@@ -90,20 +89,22 @@ const {createContract, disconnetGateway}=require('../helpers/web_util')
   } finally {
     disconnetGateway();
   }
-})
+}
 
 // PUT /distributor/vaccines with body request {"vaccineLot":"value","name":"value","quantity":"value","dateOfManufacture":"value"}
 /**
  * @author Ha Xuan Huy
  * @returns update a vaccine lot in distributor with specific ID
  */
- router.put("/vaccines", async function (req, res) {
+const updateVaccineLot=async  (req, res)=> {
   var format1= ["vaccineLot","name","quantity","dateOfManufacture"]
   if(securityModule.JSONvalidator(req.body,format1.length,format1)){
     try {
       var key1 =String(req.body.vaccineLot)
       var key2 =String(req.body.name)
       var key3 =String(req.body.quantity)
+      let bool = /^\d+$/.test(key3);
+      if (!bool){key3=10000}
       var key4 =String(req.body.dateOfManufacture)
       const contract = await createContract();
       console.log(`Update information of vaccine lot ${key1} in distributor `)
@@ -118,13 +119,13 @@ const {createContract, disconnetGateway}=require('../helpers/web_util')
   }
   else return res.send("wrong format")
   
-})
+}
 //DELETE /distributor/vaccines with body request {"vaccineLot":"value"}
 /**
  * @author Ha Xuan Huy
  * @returns delete a vaccine lot with specific ID in distributor
  */
- router.delete("/vaccines", async function (req, res) {
+const deleteVaccineLot= async (req, res) =>{
   var format1= ["vaccineLot"]
   if(securityModule.JSONvalidator(req.body,format1.length,format1)){
     try {
@@ -141,7 +142,6 @@ const {createContract, disconnetGateway}=require('../helpers/web_util')
     }
   }
   else return res.send("wrong format")
-  
-})
+}
 
-module.exports = router
+module.exports = {GetDistributorLots,getVaccineLot,deliverToMedicalUnit,retrieveLogs,updateVaccineLot,deleteVaccineLot}
