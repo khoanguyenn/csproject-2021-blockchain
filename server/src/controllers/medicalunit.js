@@ -6,7 +6,7 @@ const { buildWallet } = require("../helpers/AppUtil");
 const { serverRoot } = require("../helpers/pathUtil");
 const {createContract, disconnetGateway} = require ('../helpers/web_util')
 const RenderMiddleware = require('../middleware/RenderMiddleware');
-
+const securityModule=require("../helpers/secur_util")
 /**
  * @author Nguyen Dang Khoa
  * @description this is the rendering section of the medicalunit page
@@ -69,18 +69,23 @@ router.get('/vaccineLots', async (req, res) => {
  * @description divide the vaccine lot into ready-to-use vaccines
  * @returns status code
  */
-router.post('/vaccinate', async function (req, res){
+ router.post('/vaccinate', async function (req, res){
     let vaccineLotID = String(req.body.vaccineLot)
-    try {
-        const contract = await createContract();
-        await contract.submitTransaction('DivideVaccineLot', vaccineLotID);
-        res.sendStatus(200)
-    } catch (error) {
-        console.log('error: ' + error);
-        res.send(404);
-    } finally {
-        disconnetGateway();
+    var format1= ["vaccineLot"]
+    if(securityModule.JSONvalidator(req.body,format1.length,format1)){
+        try {
+            const contract = await createContract();
+            await contract.submitTransaction('DivideVaccineLot', vaccineLotID);
+            res.sendStatus(200)
+        } catch (error) {
+            console.log('error: ' + error);
+            res.send(404);
+        } finally {
+            disconnetGateway();
+        }
     }
+    else return res.send("wrong format")
+    
 })  
 
 /**
@@ -88,21 +93,25 @@ router.post('/vaccinate', async function (req, res){
  * @description transfer owner of the vaccine to user 
  * @returns status code
  */
-router.put('/vaccinate', async function (req, res){
-    let vaccineID = String(req.body.vaccineID);
-    let userID = String(req.body.userID);
-    try {
-        const contract = await createContract();
-        await contract.submitTransaction('VaccinateCitizen', vaccineID, userID);
-        res.sendStatus(200);
-    } catch (error) {
-        console.log('error: ' + error);
-        res.send(404);
-    } finally {
-        disconnetGateway();
+ router.put('/vaccinate', async function (req, res){
+    var format1= ["vaccineID","userID"]
+    if(securityModule.JSONvalidator(req.body,format1.length,format1)){
+        let vaccineID = String(req.body.vaccineID);
+        let userID = String(req.body.userID);
+        try {
+            const contract = await createContract();
+            await contract.submitTransaction('VaccinateCitizen', vaccineID, userID);
+            res.sendStatus(200);
+        } catch (error) {
+            console.log('error: ' + error);
+            res.send(404);
+        } finally {
+            disconnetGateway();
+        }
     }
+    else return res.send("wrong format")
+    
 })  
-
 /**
  * @author Ngo Quoc Thai
  * @description get used vaccines of specific userID
@@ -110,16 +119,18 @@ router.put('/vaccinate', async function (req, res){
  */
 router.get('/vaccinate', async function (req, res) {
     let userID = req.query.userID;
-    try {
-        const contract = await createContract();
-        let result = await contract.evaluateTransaction('CheckVaccinateState', userID);
-        res.json(JSON.parse(result.toString()));
-    } catch (error) {
-        console.log('error: ' + error);
-        res.send(404);
-    } finally {
-        disconnetGateway();
-    }
+    if(securityModule.hasSpecChar(key)){
+        try {
+            const contract = await createContract();
+            let result = await contract.evaluateTransaction('CheckVaccinateState', userID);
+            res.json(JSON.parse(result.toString()));
+        } catch (error) {
+            console.log('error: ' + error);
+            res.send(404);
+        } finally {
+            disconnetGateway();
+        }}
+    else return res.send("The ID provided contains special characters") 
 })
 
 

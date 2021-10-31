@@ -1,4 +1,5 @@
 const {createContract, disconnetGateway}=require('../helpers/web_util')
+const securityModule = require('../helpers/secur_util')
 
 
 /**
@@ -41,7 +42,8 @@ const getAllVaccineLot = async (req, res) => {
  */
  const getVaccineLot = async (req, res) => {
     let key=req.params.vaccineID
-    try {
+    if(securityModule.hasSpecChar(key)){
+      try {
         const contract = await createContract();
         console.log(`GET a vaccine lot with id ${key} from Manufacturer`)
         let data = await contract.evaluateTransaction('GetManufacturerLot', key) 
@@ -52,6 +54,9 @@ const getAllVaccineLot = async (req, res) => {
     } finally {
     disconnetGateway();
     }
+  }
+  else return res.send("The ID provided contains special characters")
+    
 }
 
 //POST /manufacturer/vaccines with body request {"manufacturer":"value","name":"value","quantity":"value","dateOfManufacture":"value"}
@@ -60,20 +65,24 @@ const getAllVaccineLot = async (req, res) => {
  * @returns create a new vaccine lot
  */
 const createVaccineLot = async (req, res) => {
-    try {
-      var key1 =String(req.body.manufacturer)
-      var key2 =String(req.body.name)
-      var key3 =String(req.body.quantity)
-      var key4 =String(req.body.dateOfManufacture)
-        const contract = await createContract();
-        await contract.submitTransaction('CreateVaccineLot', key1,key2,key3,key4);
-        res.sendStatus(200)
-    } catch (error) {
-        console.log('error: ' + error);
-        res.send(500);
-    } finally {
-        disconnetGateway();
-    }
+    var format1= ["manufacturer","name","quantity","dateOfManufacture"]
+        if(securityModule.JSONvalidator(req.body,format1.length,format1)){
+          try {
+            var key1 =String(req.body.manufacturer)
+            var key2 =String(req.body.name)
+            var key3 =String(req.body.quantity)
+            var key4 =String(req.body.dateOfManufacture)
+              const contract = await createContract();
+              await contract.submitTransaction('CreateVaccineLot', key1,key2,key3,key4);
+              res.sendStatus(200)
+          } catch (error) {
+              console.log('error: ' + error);
+              res.send(500);
+          } finally {
+              disconnetGateway();
+          }
+        }
+        else return res.send("wrong format")
 }
 
 // PUT /manufacturer/delivery with body request {"vaccineLot":"value"}
@@ -82,27 +91,30 @@ const createVaccineLot = async (req, res) => {
  * @returns  transfer vaccine lot from manufacturer to distributor
  */
 const deliverToDistributor =  async (req, res) => {
-  
-  try {
+  var format1= ["vaccineLot"]
+  if(securityModule.JSONvalidator(req.body,format1.length,format1)){
+    try {
       var key =String(req.body.vaccineLot)
       const contract = await createContract();
 
       console.log(`Deliver vaccine lot with id ${key} to distributor `)
       await contract.submitTransaction('DeliverToDistributor', key) 
       res.sendStatus(200)
-  } catch (err) {
-      console.error("error: " + err)
-      res.sendStatus(500)
-  } finally {
-    disconnetGateway();
+    } catch (err) {
+        console.error("error: " + err)
+        res.sendStatus(500)
+    } finally {
+      disconnetGateway();
+    }
   }
+  else return res.send("wrong format")
+
 }
 
 
 /**
- * @author Ha Xuan Huy
- * @coauthor Pham Minh Huy @return all vaccine lot that HAS BEEN, at some interval of time, under MANUUFACTURER
- * @returns all VaccineLot that was under manufacturer
+ * @author  Pham Minh Huy 
+ * @returns all vaccine lot that HAS BEEN, at some interval of time, under A SPECIFIC OWNER
  */
 const getLogs = async (req, res) => {
   try {
@@ -126,8 +138,9 @@ const getLogs = async (req, res) => {
  * @returns update a vaccine lot in Manufacturer with specific ID
  */
 const updateVaccineLot = async (req, res) => {
-  
-  try {
+  var format1= ["manufacturer","name","quantity","dateOfManufacture"]
+  if(securityModule.JSONvalidator(req.body,format1.length,format1)){
+    try {
       var key1 =String(req.body.vaccineLot)
       var key2 =String(req.body.name)
       var key3 =String(req.body.quantity)
@@ -143,6 +156,8 @@ const updateVaccineLot = async (req, res) => {
   } finally {
     disconnetGateway();
   }
+  }
+  else return res.send("wrong format")
 }
 
 //DELETE /manufacturer/vaccines with body request {"vaccineLot":"value"}
@@ -151,8 +166,9 @@ const updateVaccineLot = async (req, res) => {
  * @returns delete a vaccine lot with specific ID in Manufacturer
  */
 const deleteVaccineLot =  async (req, res) => {
-  
-  try {
+  var format1= ["vaccineLot"]
+  if(securityModule.JSONvalidator(req.body,format1.length,format1)){
+    try {
       var key =String(req.body.vaccineLot)
       const contract = await createContract();
 
@@ -165,6 +181,9 @@ const deleteVaccineLot =  async (req, res) => {
   } finally {
     disconnetGateway();
   }
+  }
+  else return res.send("wrong format")
+  
 }
 
 
