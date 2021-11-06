@@ -6,6 +6,7 @@ const RenderMiddleware = require('../middleware/RenderMiddleware');
 
 //FLOW: login -> checkrole & redirect -> page
 router.post('/signup', AuthMiddleware.signup);
+router.get('/signup', RenderMiddleware.registerPage);
 
 router.get('/logout', AuthMiddleware.logout);
 router.get('/login', RenderMiddleware.loginPage)

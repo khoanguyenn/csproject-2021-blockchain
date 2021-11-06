@@ -1,0 +1,100 @@
+<div class="container-md" style="width: 30rem; height: 100%">
+    <h1 class="text-center">Registration gateway</h1>
+    <form>
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Citizen identifier</label>
+            <input id="username" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Password</label>
+            <input id="password" type="password" class="form-control" id="exampleInputPassword1">
+        </div>
+        <div class="form-check row">
+            <div class="mb-3 form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1" value="manufacturer">
+                    <label class="form-check-label" for="flexRadioDefault1">
+                        Manufacturer
+                    </label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" value="distributor">
+                <label class="form-check-label" for="flexRadioDefault2">
+                    Distributor
+                </label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault3" value="medicalunit">
+                <label class="form-check-label" for="flexRadioDefault2">
+                    User
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <button class="btn btn-primary btn-block" id="signup">Register</button>
+        </div>
+    </form>
+
+</div>
+<script>
+$("#signup").on("click", (e) => {
+    e.preventDefault();
+    const checkedRadio = $("input[type=radio]:checked");
+    const userRole = checkedRadio.val();
+    const username = $("#username").val();
+    const password = $("#password").val();
+    let errorMessage = ""
+    if (!username && !password) {
+        errorMessage += "Please enter your username and password! </br>";
+    }
+    if (!userRole) {
+        errorMessage += "Please select a role to register! \n";
+    }
+    if (errorMessage) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            html: errorMessage
+        })
+    }
+
+    const sendingData = {
+        "username": username,
+        "password": password,
+        "role": userRole,
+    }
+
+    $.ajax({
+    type: 'POST',
+    url: 'http://localhost:3000/auth/signup',
+    contentType: 'application/json',
+    data: JSON.stringify(sendingData),
+    beforeSend: function () {
+        console.log(this.data);
+        Swal.fire({
+            title: "Sending data",
+            text: "Regsitering a new user...",
+            icon: "info",
+            timerProgressBar: true,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        })
+    }
+    })
+    .done(function (msg) {
+        Swal.fire({
+            icon: 'success',
+            title: 'All done!',
+            html: `User ${username} has been successfully created!`,
+        })
+        window.location.href = "http://localhost:3000/auth/login";
+    }).fail(function (msg) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: msg.responseJSON.message ? "Identity is already exist in wallet" : "Something when wrong, please try again!",
+            })
+    })
+    
+})
+</script>

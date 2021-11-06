@@ -4,6 +4,10 @@ const loginPage = (req, res) => {
     })
 }
 
+const registerPage = (req, res) => {
+    res.render('signup');
+}
+
 const userPage = (req, res) => {
     res.render('user', {
         isUserPage: true
@@ -41,6 +45,7 @@ const getInfo = (req, res) => {
 
 module.exports = {
     loginPage,
+    registerPage,
     getInfo,
     userPage,
     manufacturerPage,
