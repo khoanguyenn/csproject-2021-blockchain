@@ -11,9 +11,9 @@
  router.get('/',AuthMiddleware.verifyToken, AuthMiddleware.isMedicalUnit,RenderMiddleware.medicalUnitPage);
  router.get('/delivery', RenderMiddleware.distributorDeliveryPage);
  
- router.get("/vaccines", MedicalunitMiddleware.GetDistributorLots)
- router.get("/vaccines/:vaccineID", MedicalunitMiddleware.getVaccineLot)
- router.put("/delivery", MedicalunitMiddleware.deliverToMedicalUnit)
+ router.get("users", MedicalunitMiddleware.getAllUsers);
+ router.get("/vaccines", MedicalunitMiddleware.getAllUsers)
+ router.get("/vaccines/:vaccineID", MedicalunitMiddleware.getVaccine);
  router.get("/logs", MedicalunitMiddleware.retrieveLogs)
  router.put("/vaccines", MedicalunitMiddleware.updateVaccineLot)
  router.delete("/vaccines", MedicalunitMiddleware.deleteVaccineLot)

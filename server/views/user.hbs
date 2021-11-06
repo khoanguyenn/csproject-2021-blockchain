@@ -48,28 +48,6 @@
                         <h1>Lion's vaccine system</h1>
                     </header>
                     <section id="card-display" class="d-flex">
-                        <div class="card mx-auto" style="width: 25rem; height: 35rem">
-                            <img class="card-img-top" src="https://file3.qdnd.vn/data/images/0/2021/10/08/vuongthuy/09102021vthuy1.jpg?dpi=150&quality=100&w=870" alt="Card image cap">
-                                <div class="card-body">
-                                    <h5 class="card-title">Vo Thanh Minh Khoi</h5>
-                                    <div class="form-group row my-3">
-                                        <label for="vaccine-id" class="col-4 col-form-label">Vaccine ID</label>
-                                        <div class="col-8">
-                                        <input readonly type="text" class="form-control" id="vaccine-id" placeholder="Loading...">
-                                        </div>
-                                    </div>
-                                    <div class="form-group row my-3">
-                                        <label for="vaccine-status" class="col-4 col-form-label">Status</label>
-                                        <div class="col-8 my-auto">
-                                        <span class="badge bg-success text-light">Fully Taken</span>
-                                        </div>
-                                        
-                                    </div>
-                                    <button href="#" class="btn btn-primary" data-toggle="modal" data-target="#moreInfo" data-whatever="Khoa">See details</button>
-                                </div>
-                        </div>
-
-
                     </section>
                     <footer class="text-right">
                         Copyright by Khoi and Khoa
@@ -78,7 +56,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="moreInfo" tabindex="-1" role="dialog">
+    <div class="modal fade" id="moreInfo_0" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
             <div class="modal-header">
@@ -88,7 +66,32 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="modal-body__form">
+                <form id="modal-body__form_0">
+                   
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="confirm-button" data-dismiss="modal">
+                    <i class="fas fa-check"></i>
+                    <span class="ml-1">Confirm</span>
+                </button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="moreInfo_1" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Vaccine Details</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="modal-body__form_1">
                    
                 </form>
             </div>
@@ -130,21 +133,30 @@
                     </div>`
         
     })
-    getVaccinePassport("khoanguyenn");
+    const userId = document.cookie.split("=")[1];
+    console.log(userId);
+    getVaccinePassport(userId);
     function getVaccinePassport(userId) {
         $.ajax(`http://localhost:3000/medical-unit/vaccinate?userID=${userId}`)
             .done(function(data) {
-                //Convert list to list of users
+                //Convert list to list of user
                 const vaccineList = data.map(user => user.Record);
-                console.log
-                vaccineList.map(vaccine => {
+                let card = "";
+                const displayContext = $('#card-display')
+                if(vaccineList.length === 0) {
+                    card = `No vaccine record yet!`;
+                    displayContext.append(card);
+                }
+                else {
+                    console.log("Running")
+                    vaccineList.map((vaccine, index) => {
                     const vaccineOwner = vaccine["owner"];
                     const vaccineName = vaccine["vaccineName"];
                     const vaccineId = vaccine["vaccineID"]
                     const vaccineStatus = vaccineList.length < 2 ? 
                         `<span class="badge bg-warning text-dark">Not fully taken</span>` :
                         `<span class="badge bg-success text-light">Fully taken</span>`
-                    const card = `
+                    card = `
                         <div class="card mx-auto" style="width: 25rem; height: 35rem">
                             <img class="card-img-top" src="https://file3.qdnd.vn/data/images/0/2021/10/08/vuongthuy/09102021vthuy1.jpg?dpi=150&quality=100&w=870" alt="Card image cap">
                             <div class="card-body">
@@ -162,30 +174,24 @@
                                     </div>
                                     
                                 </div>
-                                <button id="vaccine-details" class="btn btn-primary" data-toggle="modal" data-target="#moreInfo">See details</button>
+                                <button id="vaccine-details" class="btn btn-primary" data-toggle="modal" data-target="#moreInfo_${index}">See details</button>
                             </div>
                         </div>`;
-                    const displayContext = $('#card-display')
                     displayContext.append(card);
-                    return vaccineList;
                 })
+                }
+                return vaccineList;
             })
             .then(function (data) {
-                const vaccineList = data.map(user => user.Record);
-                const vaccineContent = $('#modal-body__form');
-                console.log(vaccineContent)
-                vaccineList.map(vaccine => {
-                    const {vaccineManufacturer, vaccineName, vaccineID, dateOfManufacturer} = vaccine;
-                    const dateForm = dateOfManufacturer.split('/').reverse().join('/');
+                const vaccineList = data.map(user => user.Record); 
+                vaccineList.map((vaccine, index) => {
+                    const vaccineContent = $(`#modal-body__form_${index}`);
+                    const {vaccineManufacturer, vaccineName, vaccineID} = vaccine;
                     const vaccineDetail = `
                     <div class="row">
                         <div class="form-group col">
                             <label for="manufacturer" class="col-form-label">Manufacturer:</label>
                             <input readonly class="form-control" id="manufacturer" value="${vaccineManufacturer}"></input>
-                        </div>
-                        <div class="form-group col">
-                            <label for="vaccine-date" class="col-form-label">Manufacture date:</label>
-                            <input readonly class="form-control" id="vaccine-date" type="date" value="${dateForm}"></input>
                         </div>
                     </div>
                     <div class="row">

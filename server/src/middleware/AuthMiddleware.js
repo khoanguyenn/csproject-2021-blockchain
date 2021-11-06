@@ -8,6 +8,7 @@
 //Dependencies
 const bcrypt = require("bcrypt");
 const path = require("path");
+const fs = require("fs");
 const { Wallets } = require("fabric-network");
 const { buildWallet } = require("../helpers/AppUtil");
 
@@ -68,13 +69,18 @@ const signup = async (req, res) => {
 
         //Find the available identites
         const userIdentity = await wallet.get(userId);
-        if (userIdentity) {
-			throw Error(`An identity for the user ${userId} already exists in the wallet`);
+        if (userIdentity) {	
+        throw Error(`An identity for the user ${userId} already exists in the wallet`);
         }
         //Enroll new user
+
         const mspOrg = mspOrgs[role];
         const affiliation = affiliationList[role];
         await registerAndEnrollUser(caClient, wallet, mspOrg, userId, affiliation); 
+
+        if (role === "medicalunit") {
+            appendMedicalUser(userId);
+        }
         req.userId = userId;
         res.json({
             message: `User ${userId} sign up successfully!`
@@ -96,15 +102,23 @@ const authenticate = async (req, res, next) => {
 
         //Check the available user identity
         const userId = await bcrypt.hashSync(concatStr, salt);
-        const { wallet, userRole } = await getRole(userId);
+        let { wallet, userRole } = await getRole(userId);
         if (!userRole && !wallet) {
             throw Error("Invalid username and password!");
+        }
+
+        if (userRole === "medicalunit") {
+            const listPath = path.resolve(serverRoot, "walletMedic", "userList.json");
+            const rawList = fs.readFileSync(listPath);
+            const userList = JSON.parse(rawList);
+            if (userList.users.includes(userId)) {
+                userRole = "user";
+            }
         }
 
         req.userId = userId;
         req.role = userRole;
         const expireDate = getExpireDate(60);
-        console.log(expireDate);
         res.cookie("userId", userId, {
             expireDate,
         });
@@ -169,8 +183,6 @@ const isDistributor = async (req, res, next) => {
     } catch(err) {
         console.log("[ERROR]: " + err);
     }
-    next();
-
 }
 
 const isMedicalUnit = async (req, res, next) => {
@@ -192,7 +204,10 @@ const checkRole = (req, res) => {
         "manufacturer": "/manufacturer",
         "distributor": "/distributor",
         "medicalunit": "/medical-unit",
+        "user": "/user",
     }
+
+    console.log("Role: " + userRole);
     const destination = redirectList[userRole];
     res.redirect(destination);
 }
@@ -239,6 +254,17 @@ const getExpireDate = (minute) => {
     const expireDate = time + 1000 * 60 * minute;
     now.setTime(expireDate);
     return now.toUTCString();
+}
+
+const appendMedicalUser = (userId) => {
+    const listPath = path.resolve(serverRoot, "walletMedic", "userList.json");
+    //Get userlist
+    const rawList = fs.readFileSync(listPath);
+    let userList = JSON.parse(rawList);
+    userList.users.push(userId);
+
+    let data = JSON.stringify(userList);
+    fs.writeFileSync(listPath, data);
 }
 
 module.exports = {

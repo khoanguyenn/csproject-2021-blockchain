@@ -71,8 +71,6 @@ router.get('/vaccineLots', async (req, res) => {
  */
  router.post('/vaccinate', async function (req, res){
     let vaccineLotID = String(req.body.vaccineLot)
-    var format1= ["vaccineLot"]
-    if(securityModule.JSONvalidator(req.body,format1.length,format1)){
         try {
             const contract = await createContract();
             await contract.submitTransaction('DivideVaccineLot', vaccineLotID);
@@ -83,9 +81,6 @@ router.get('/vaccineLots', async (req, res) => {
         } finally {
             disconnetGateway();
         }
-    }
-    else return res.send("wrong format")
-    
 })  
 
 /**
@@ -94,8 +89,6 @@ router.get('/vaccineLots', async (req, res) => {
  * @returns status code
  */
  router.put('/vaccinate', async function (req, res){
-    var format1= ["vaccineID","userID"]
-    if(securityModule.JSONvalidator(req.body,format1.length,format1)){
         let vaccineID = String(req.body.vaccineID);
         let userID = String(req.body.userID);
         try {
@@ -108,8 +101,6 @@ router.get('/vaccineLots', async (req, res) => {
         } finally {
             disconnetGateway();
         }
-    }
-    else return res.send("wrong format")
     
 })  
 /**
@@ -119,7 +110,6 @@ router.get('/vaccineLots', async (req, res) => {
  */
 router.get('/vaccinate', async function (req, res) {
     let userID = req.query.userID;
-    if(securityModule.hasSpecChar(key)){
         try {
             const contract = await createContract();
             let result = await contract.evaluateTransaction('CheckVaccinateState', userID);
@@ -129,8 +119,7 @@ router.get('/vaccinate', async function (req, res) {
             res.send(404);
         } finally {
             disconnetGateway();
-        }}
-    else return res.send("The ID provided contains special characters") 
+        }
 })
 
 

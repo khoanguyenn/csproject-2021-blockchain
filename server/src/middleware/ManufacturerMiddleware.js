@@ -65,8 +65,6 @@ const getAllVaccineLot = async (req, res) => {
  * @returns create a new vaccine lot
  */
 const createVaccineLot = async (req, res) => {
-    var format1= ["manufacturer","name","quantity","dateOfManufacture"]
-        if(securityModule.JSONvalidator(req.body,format1.length,format1)){
           try {
             var key1 =String(req.body.manufacturer)
             var key2 =String(req.body.name)
@@ -87,8 +85,7 @@ const createVaccineLot = async (req, res) => {
               disconnetGateway();
           }
         }
-        else return res.send("wrong format")
-}
+
 
 // PUT /manufacturer/delivery with body request {"vaccineLot":"value"}
 /**
@@ -96,8 +93,7 @@ const createVaccineLot = async (req, res) => {
  * @returns  transfer vaccine lot from manufacturer to distributor
  */
 const deliverToDistributor =  async (req, res) => {
-  var format1= ["vaccineLot"]
-  if(securityModule.JSONvalidator(req.body,format1.length,format1)){
+
     try {
       var key =String(req.body.vaccineLot)
       const contract = await createContract();
@@ -111,8 +107,6 @@ const deliverToDistributor =  async (req, res) => {
     } finally {
       disconnetGateway();
     }
-  }
-  else return res.send("wrong format")
 
 }
 
