@@ -103,3 +103,13 @@ Vaccine lot hit the final destination ```owner: medicalunit``` then each vaccine
   * GET ```/vaccinate``` - return array of vaccine of a specific user has taken
   * GET ```/vaccines``` - return of the vaccines with vaccine's ID
   * GET ```/users``` - return all of the user in the network
+
+## How to setup
+1. Install dependencies: `cd csproject-2021-blockchain/server`, then type `npm install`.
+2. Run blockchain network `cd /blockchain/test-network`, then type `./lazy_script.sh`.
+3. Run webserver: `cd /server`, then type `npm run dev` (for development mode) or `npm start` (to start the server)
+4. Login to the page `localhost:3000/auth/login` with the below account or register at `localhost:3000/auth/signup`
+  * Manufacturer: manuAdmin - admin123
+  * Distributor: disAdmin - admin123
+  * Medicalunit: medicAdmin - admin123
+  * Test user: 567567567567 - pass123 or 123123123123 - pass123
